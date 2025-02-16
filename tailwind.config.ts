@@ -77,6 +77,7 @@ export default {
       colors: {
         background: "#E9E9E9",
         nav: "#181716",
+        foot:"#1A1A1D",
         second: "#FFFFFF",
         foreground: "hsl(var(--foreground))",
         card: {

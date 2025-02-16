@@ -20,20 +20,32 @@ const TwoHeightMasonryGallery = () => {
   return (
     <section className="py-12 bg-white">
       <div className="container mx-auto px-4">
-      <div className="text-center mb-40 md:mb-8 flex justify-center py-4 flex-col items-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black sm:mb-2">Customers Gallery</h1>
-            <div className='bg-red-500 h-1 w-96'></div>
-            <p className="text-xl sm:text-xl sm:mt-2 font-medium text-gray-700">See our customers review and many more</p>
+        
+        {/* Title Section */}
+        <div className="text-center mb-10 flex flex-col items-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black sm:mb-2 relative">
+            Customers Gallery
+            <span className="block bg-red-500 h-1 w-full absolute left-0 bottom-0"></span>
+          </h1>
+          <p className="text-lg sm:text-xl sm:mt-1 font-medium text-gray-700">
+            See our customers' reviews and many more
+          </p>
         </div>
-        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 space-y-4">
+
+        {/* Responsive Masonry Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {images.map((img, index) => (
-            <div key={index} className="relative overflow-hidden rounded-lg shadow-md transition-shadow duration-300 break-inside-avoid">
+            <div
+              key={index}
+              className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-300 hover:scale-105 mx-auto w-[80%] sm:w-full"
+              style={{ height: img.height }}
+            >
               <Image
                 src={img.src}
                 alt={img.alt}
                 width={300}
                 height={img.height}
-                className="w-full h-auto object-cover transition-transform ease-in-out duration-300 hover:scale-110"
+                className="w-full h-full object-cover"
               />
             </div>
           ))}

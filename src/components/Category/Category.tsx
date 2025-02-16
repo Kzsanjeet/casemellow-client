@@ -31,11 +31,15 @@ const Category = () => {
   ]
 
   return (
-    <div className="p-4 sm:p-6 md:p-8 flex flex-col items-center">
-      <div className="text-center mb-6 md:mb-8">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-2 sm:mb-2">Select your theme</h1>
-        <div className="bg-red-500 h-1"></div>
-        <p className="text-xl sm:text-xl font-medium text-gray-800">Choose from a wide range of categories</p>
+    <div className="py-12 sm:p-6 md:p-8 flex flex-col items-center">
+      <div className="text-center mb-10 flex flex-col items-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black sm:mb-2 relative">
+            Select your theme
+            <span className="block bg-red-500 h-1 w-full absolute left-0 bottom-0"></span>
+          </h1>
+          <p className="text-lg sm:text-xl sm:mt-1 font-medium text-gray-700">
+            Choose from a wide range of categories
+          </p>
       </div>
       <div className="w-full max-w-[90%] bg-white p-4 sm:p-6 rounded-lg">
         <div className="flex flex-wrap justify-center -mx-2">
