@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 
 const Footer = () => {
@@ -27,9 +28,9 @@ const Footer = () => {
             <nav className="list-none">
               {['Home', 'Customize', 'Products', 'Order', 'About'].map((item) => (
                 <li key={item}>
-                  <a className="text-slate-200 hover:text-white hover:underline text-sm cursor-pointer">
+                  <Link href={`/${item.toLowerCase()}`} className="text-slate-200 hover:text-white hover:underline text-sm cursor-pointer">
                     {item}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </nav>

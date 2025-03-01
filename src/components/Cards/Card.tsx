@@ -1,33 +1,76 @@
 import Image from "next/image";
+import { motion } from "motion/react"
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
+interface Brand {
+  _id: string;
+  brandName: string;
+}
 
-const Card = () => {
+interface Product {
+  _id: string;
+  productName: string;
+  brands: Brand | null;
+  phoneModel: string;
+  coverType: string[];
+  productDescription: string;
+  productPrice: number;
+  productImage: string;
+  productCategory: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface CardProps {
+  product: Product;
+}
+
+const Card: React.FC<CardProps> = ({ product }) => {
+  if (!product) return null; // Prevents error if product is undefined
+  const discountRate = 15 / 100;
+  const priceBeforeDiscount = (product.productPrice / (1 - discountRate)).toFixed(0); // Correct calculation
+  const params = useParams();
+  const category = params.category;
+
   return (
-    <div className="w-80 h-[420px] bg-white rounded-2xl overflow-hidden shadow-lg transition-all hover:shadow-xl">
-      <div className="relative">
-        <Image
-          src={"/image/anime.jpg"}
-          width={320}
-          height={320}
-          alt="CR7 Inspired Cover"
-          className="w-full h-80 object-cover duration-300 hover:scale-105"
-        />
-        <span className="absolute top-0 left-0 bg-yellow-600 text-white text-xs font-semibold px-3 py-1 rounded-md shadow-md">
-          NEW
-        </span>
-      </div>
-      <div className="p-3">
-        <h1 className="text-lg font-bold text-gray-900">CR7 Inspired Cover</h1>
-        <p className="text-sm text-gray-500">Sports - Premium Double Layer</p>
-        <div className="flex justify-between items-center mt-2">
-          <div>
-            <span className="text-sm font-bold text-red-600">Rs 1000</span>
-            <span className="text-sm text-gray-500 line-through ml-2">Rs 1200</span>
-          </div>
-          <span className="bg-green-500 text-white px-1 py-1 text-xs font-bold rounded-md">17% OFF</span>
+    <Link href={`/products/${product.productCategory.toLowerCase()}/${product._id}`}>
+      <motion.div 
+      initial ={{opacity:0, y: -50}}
+      animate={{opacity:1, y:0}}
+      transition={{duration: 0.5, delay: 0.5}}
+      className="w-80 h-[420px] bg-white rounded-2xl overflow-hidden shadow-lg transition-all hover:shadow-xl">
+        <div className="relative">
+          <img
+            src={product.productImage || "/placeholder.png"} // Default fallback image
+            width={320}
+            height={320}
+            alt={product.productName}
+            className="w-full h-80 object-cover duration-300 hover:scale-110"
+          />
+          <span className="absolute top-0 left-0 bg-red-500 text-white text-xs font-semibold px-3 py-1">
+            NEW
+          </span>
         </div>
-      </div>
-    </div>
+        <div className="p-3">
+          <h1 className="text-lg font-bold text-gray-900 truncate">{product.productName}</h1>
+          <div className="flex justify-between items-center">
+          <p className="text-sm text-gray-500">
+            {product.productCategory} 
+          </p>
+          <p className="text-sm text-gray-800">{product.brands?.brandName}</p>
+          </div>
+          <div className="flex justify-between items-center mt-2">
+            <div>
+              <span className="text-[17px] font-bold text-red-600">Rs {product.productPrice}</span>
+              <span className="text-xs text-gray-700 line-through ml-2">Rs {priceBeforeDiscount}</span>
+            </div>
+            <span className="bg-green-500 text-white px-2 py-1 text-xs font-bold rounded-md">15% OFF</span>
+          </div>
+        </div>
+      </motion.div>
+    </Link>
   );
 };
 
