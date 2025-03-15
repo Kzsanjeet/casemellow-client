@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,6 +21,10 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Card from '../Cards/Card';
 import Loader from '../Loading/Loader';
+import { toast } from 'sonner';
+import Cookies from "js-cookie";
+import { CartContext } from '@/provider/CartContext';
+import  { LoginUserContext } from '@/provider/LoginContext';
 
 interface Brand {
   _id: string;
@@ -55,8 +59,11 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const [brandDetails, setBrandDetails] = useState<Brand[]>([]);
   const [similarProduct,setSimilarProduct] = useState<Product[]>([]);
   const [phoneModelDetails, setPhoneModelDetails] = useState<string[]>([]); 
+  const {isLoggedIn, setIsLoggedIn} = useContext(LoginUserContext)!
+  const {cart, setCart} = useContext(CartContext)!
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null)
+  
   useEffect(() => {
     const getBrandName = async () => {
       setLoading(true);
@@ -123,7 +130,57 @@ const Description: React.FC<DescProps> = ({ product }) => {
   },[product._id])
 
 
+  const handleAddToCart = async () => {
+    console.log("desc", isLoggedIn)
+    if (!isLoggedIn) {
+      toast.error("Please log in to add items to the cart");
+      return;
+    }
+  
+    console.log('Product ID:', product._id); // Log product ID for debugging
+    if (!product._id) {
+      toast.error("Product ID is missing.");
+      return;
+    }
+  
+    try {
+      setLoading(true); // Set loading to true while making the API call
+      const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/add-cart`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // If you have an authentication token, add it to headers
+          // "Authorization": `Bearer ${Cookies.get('authToken')}`, 
+        },
+        credentials: "include", // Ensure cookies are sent with the request
+        body: JSON.stringify({
+          productId: product._id,  // Product ID
+          brandName: selectedBrand,
+          phoneModel: selectedModel,
+          coverType: selectedCover.join(""), // Combine the selected cover types into a string
+          quantity: quantity,
+        }),
+      });
+  
+      const data = await response.json();
+      if (data.success) {
+        setCart(data.data); // Update the cart context with the new cart data
+        toast.success("Added to cart successfully!");
+      } else {
+        // Handle error gracefully
+        toast.error(data.message || "Failed to add product to cart.");
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error); // Log error details
+      toast.error("Something went wrong while adding to the cart.");
+    } finally {
+      setLoading(false); // Reset loading state
+    }
+  };
+  
 
+  
+  
   const handleCoverTypeChange = (type: string) => {
     setSelectedCover((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
@@ -228,7 +285,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
 
                   {/* Action Buttons */}
                 <div className="pt-8 flex w-4/5 items-center justify-start">
-                  <Button  className="w-2/5 text-white font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span> Add to Cart</Button>
+                  <Button onClick={handleAddToCart} className="w-2/5 text-white font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span> Add to Cart</Button>
                 </div>
               </div>
               </div>

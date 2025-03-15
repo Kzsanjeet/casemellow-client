@@ -160,16 +160,15 @@
 
 
 
-
-
-
-
 "use client"
 import { Search, ShoppingCart, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { FormEvent, useContext, useEffect, useState } from "react"
 import { Input } from "../ui/input"
+import { UserContext } from "@/provider/UserContext"
+import { LoginUserContext } from "@/provider/LoginContext"
+import { toast } from "sonner"
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -177,24 +176,49 @@ const Nav = () => {
   const [isVisible, setIsVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
   const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("")
   const pathname = usePathname()
   const router = useRouter()
+  // const userContext = useContext(UserContext);
+  // if (!userContext) throw new Error("UserContext must be used within a UserProvider");
+  const {isLoggedIn} = useContext(LoginUserContext)!
+  const { user } = useContext(UserContext);
+
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     if (window.scrollY > lastScrollY) {
+  //       setIsVisible(false) // Hide navbar when scrolling down
+  //     } else {
+  //       setIsVisible(true) // Show navbar when scrolling up
+  //     }
+  //     setLastScrollY(window.scrollY)
+  //   }
+
+  //   window.addEventListener("scroll", handleScroll)
+  //   return () => window.removeEventListener("scroll", handleScroll)
+  // }, [lastScrollY])
 
   useEffect(() => {
+    let ticking = false;
+  
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setIsVisible(false) // Hide navbar when scrolling down
-      } else {
-        setIsVisible(true) // Show navbar when scrolling up
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setIsVisible(window.scrollY < lastScrollY);
+          setLastScrollY(window.scrollY);
+          ticking = false;
+        });
+        ticking = true;
       }
-      setLastScrollY(window.scrollY)
-    }
+    };
+  
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [lastScrollY])
 
+  //handle the search click
   const handleSearchClick = () => {
     if (search.trim() && isSearchVisible) {
       // If search input is visible and has content, perform search
@@ -207,6 +231,26 @@ const Nav = () => {
       }
     }
   }
+
+      //for the cart click
+      const handleCartClick = (e: FormEvent) => {
+        if (!isLoggedIn) {
+            e.preventDefault();
+            toast.error("Please log in to access your cart");
+    
+            console.log("nav test: ", user?._id);
+    
+            if (user?._id) {
+                localStorage.setItem("redirectAfterLogin", `/cart/${user._id}`);
+            } else {
+                localStorage.setItem("redirectAfterLogin", "/cart");
+            }
+    
+            router.push("/login");
+        } else {
+            router.push(`/cart/${user?._id}`);
+        }
+    };
 
   return (
     <nav
@@ -335,9 +379,10 @@ const Nav = () => {
             </button>
 
             {/* Cart Icon */}
-            <button className="text-gray-300 hover:text-white p-1">
+              <button onClick={handleCartClick} className="text-gray-300 hover:text-white p-1">
               <ShoppingCart className="size-5 sm:size-6" />
             </button>
+  
 
             {/* Profile Dropdown */}
             <div className="relative ml-1">

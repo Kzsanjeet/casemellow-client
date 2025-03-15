@@ -220,7 +220,7 @@ const SearchPage = () => {
     <div className="min-h-screen flex flex-col bg-white">
     <Nav />
     <Breadcrumb className="mb-8 max-w-7xl mx-auto">
-          <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
+        <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
             <BreadcrumbItem>
               <BreadcrumbLink href="/home">Home</BreadcrumbLink>
             </BreadcrumbItem>
@@ -230,7 +230,7 @@ const SearchPage = () => {
             </BreadcrumbItem>
             <BreadcrumbSeparator><ChevronRight className="h-4 w-4" /></BreadcrumbSeparator>
           </BreadcrumbList>
-        </Breadcrumb>
+    </Breadcrumb>
     <div className="flex-1 pt-20 container w-full sm:w-[80%] sm:mx-auto">
       {/* Page Header - Centered */}
       <div className="text-center mb-8">
