@@ -225,8 +225,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Heart, Trash2, MapPin, ChevronRight } from 'lucide-react';
 import Cookies from "js-cookie";
 import { toast } from 'sonner';
-import { LoginUserContext } from '@/provider/LoginContext';
-import { UserContext } from '@/provider/UserContext';
 import { CartContext } from '@/provider/CartContext';
 
 

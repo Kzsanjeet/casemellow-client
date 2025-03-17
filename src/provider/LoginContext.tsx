@@ -17,6 +17,7 @@
 
 // const LoginContext: FC<LoginUserProviderProps> = ({children}) => {
 //     const [isLoggedIn,setIsLoggedIn] = useState(false);
+//     console.log(isLoggedIn) 
 //   return (
 //     <LoginUserContext.Provider value={{isLoggedIn,setIsLoggedIn}}>
 //         {children}
@@ -42,6 +43,7 @@ const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
     // Get the initial value from cookies
     return Cookies.get("isLoggedIn") === "true";
   });
+  console.log(isLoggedIn)
 
   // Save value to cookies whenever it changes
   useEffect(() => {

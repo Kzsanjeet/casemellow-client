@@ -45,7 +45,7 @@ interface Product {
 
 const SearchPage = () => {
   const searchParams = useSearchParams()
-  const query = searchParams.get("search") || ""
+  const query = searchParams.get("q") || ""
 
   const [productDetails, setProductDetails] = useState<Product[]>([])
   const [brand, setBrand] = useState<string>("")
@@ -219,7 +219,8 @@ const SearchPage = () => {
   return (
     <div className="min-h-screen flex flex-col bg-white">
     <Nav />
-    <Breadcrumb className="mb-8 max-w-7xl mx-auto">
+    <div className="flex-1 pt-20 container w-full sm:w-[80%] sm:mx-auto">
+    <Breadcrumb className="max-w-[100%] mt-4 mx-auto">
         <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
             <BreadcrumbItem>
               <BreadcrumbLink href="/home">Home</BreadcrumbLink>
@@ -228,10 +229,8 @@ const SearchPage = () => {
             <BreadcrumbItem>
               <BreadcrumbLink href="/products">Products</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator><ChevronRight className="h-4 w-4" /></BreadcrumbSeparator>
           </BreadcrumbList>
     </Breadcrumb>
-    <div className="flex-1 pt-20 container w-full sm:w-[80%] sm:mx-auto">
       {/* Page Header - Centered */}
       <div className="text-center mb-8">
         <div className="text-center mb-10 mt-4 flex flex-col items-center justify-center">
@@ -271,7 +270,7 @@ const SearchPage = () => {
                   Clear All
                 </Button>
                 <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
-                  <X className="h-4 w-4" />
+                  <X className="h-4 w-4 text-red-400 hover:bg-red-200" />
                 </Button>
               </div>
             </div>

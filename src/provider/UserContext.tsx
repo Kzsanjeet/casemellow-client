@@ -61,11 +61,14 @@ export const UserContext = createContext<UserContextType>({
 // Provider component
 const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // Initialize user state, load from localStorage if available
-  const [user, setUser] = useState<User | null>(() => {
-    // Get user from localStorage if available
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(()=>{
     const storedUser = localStorage.getItem("user");
-    return storedUser ? JSON.parse(storedUser) : null;
-  });
+    if(storedUser){
+      setUser(JSON.parse(storedUser))
+    }
+  },[])
 
   // Save user to localStorage whenever it changes
   useEffect(() => {

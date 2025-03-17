@@ -1,24 +1,25 @@
 "use client";
 
 import Cart from "@/components/Cart/Cart";
+import Footer from "@/components/Footer/Footer";
 import Nav from "@/components/Nav/Nav";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 
 const Page = () => {
-  const params = useParams();
-  // Ensure clientId is a string
-  const clientId = Array.isArray(params?.clientId) ? params.clientId[0] : params?.clientId;
+    const params = useParams();
+    const router = useRouter()
+    const clientId = params.clientId as string; 
 
-  // If clientId is undefined or not a valid string, you can redirect or handle the error
-  if (!clientId) {
-    return <div>Client ID is missing</div>;
-  }
-
+    if(!clientId){
+        router.push("/cart")
+    }
+  
   return (
     <div className="w-full bg-white">
       <Nav />
       <Cart clientId={clientId} />
+      <Footer/>
     </div>
   );
 };
