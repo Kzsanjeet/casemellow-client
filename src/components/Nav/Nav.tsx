@@ -263,14 +263,15 @@
 
 
 "use client"
-import { Search, ShoppingCart, X } from "lucide-react"
+import { Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname} from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { LoginUserContext } from "@/provider/LoginContext"
 import ExpandableSearch from "../search/ExpandableSearch"
 import Login from "../Login/Login"
-import { toast, Toaster } from "sonner"
+import Image from "next/image"
+// import { toast, Toaster } from "sonner"
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -322,11 +323,11 @@ const Nav = () => {
   }
 
   const handleCartLogin = () => {
-    // Instead of just setting loginCart to true, also open the login modal
     setLoginCart(true);
-    setLoginOpen(true); // This opens the login modal
+    setLoginOpen(true); 
   }
  
+  console.log(loginCart)
   // for the cart click
   // const handleCartClick = (e: FormEvent) => {
   //   if (!isLoggedIn) {
@@ -383,13 +384,13 @@ const Nav = () => {
             className={"flex flex-1 items-center justify-center sm:justify-start"}
           >
             <div className="flex shrink-0 items-center">
-              <a href="home" className="text-orange-700 no-underline hover:text-gray-300 hover:duration-500">
-                <img
+              <Link href="home" className="text-orange-700 no-underline hover:text-gray-300 hover:duration-500">
+                <Image
                   className={`h-auto overflow-hidden w-40 sm:w-44 md:w-48 transition-all duration-300`}
                   src="/image/logo2.png"
                   alt="Casemellow"
                 />
-              </a>
+              </Link>
             </div>
 
             {/* Desktop Navigation Links */}
@@ -467,7 +468,7 @@ const Nav = () => {
                     aria-haspopup="true"
                   >
                     <span className="sr-only">Open user menu</span>
-                    <img
+                    <Image
                       className="size-8 rounded-full"
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt="User Avatar"

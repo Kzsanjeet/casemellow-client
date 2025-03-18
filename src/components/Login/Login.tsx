@@ -159,14 +159,16 @@
 
 
 "use client";
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, { FormEvent, useContext,useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Lock, Mail, X } from "lucide-react";
 import { LoginUserContext } from "@/provider/LoginContext";
 import Loader from "../Loading/Loader";
+import Image from "next/image";
+import Link from "next/link";
 
 interface LoginModalProps {
     loginOpen: boolean;
@@ -177,7 +179,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
-    const router = useRouter();
+    // const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const { setIsLoggedIn } = useContext(LoginUserContext)!;
 
@@ -227,7 +229,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
             <p className="text-gray-500 text-center">Login to <span className="text-red-700 font-semibold">Casemellow</span></p>
             
             <Button variant="outline" className="w-full flex items-center justify-center space-x-2 border-gray-300" onClick={() => toast.info("Google login coming soon!")}>  
-                <img src="/image/google.png" className="w-10 mix-blend-multiply"/>
+            <Image src="/google.png" className="w-10 mix-blend-multiply" width={40} height={40} alt="Google Logo" />
                 <span>Continue with Google</span>
             </Button>
 
@@ -248,14 +250,14 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                     </button>
                 </div>
                 <div className="flex items-center justify-between">
-                    <a href="#" className="text-sm text-red-600 hover:text-red-700">Forgot password?</a>
+                    <Link href={"#"} className="text-sm text-red-600 hover:text-red-700">Forgot password?</Link>
                 </div>
                 <Button type="submit" disabled={loading} className="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-lg">
                     {loading ? "Authenticating..." : "Sign In"}
                 </Button>
             </form>
             
-            <p className="text-center text-gray-600">Don't have an account? <a href="#" className="text-red-600 hover:text-red-700">Sign Up</a></p>
+            <p className="text-center text-gray-600">Don&apos;t have an account? <a href="#" className="text-red-600 hover:text-red-700">Sign Up</a></p>
         </div>
     </div>
     );

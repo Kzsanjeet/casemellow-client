@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ScrollToTop from "@/components/ScrollUp/ScrollToTop";
-import { Toaster, toast } from 'sonner';
+import { Toaster } from 'sonner';
 import LoginContext from "@/provider/LoginContext";
-import UserProvider from "@/provider/UserContext";
-import CartProvider from "@/provider/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,13 +32,9 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LoginContext>
-          <UserProvider>
-          <CartProvider>
           <Toaster/>
           {children}
           <ScrollToTop/>
-          </CartProvider>
-          </UserProvider>
         </LoginContext>
         
       </body>

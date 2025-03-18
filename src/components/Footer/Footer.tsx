@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -8,7 +9,7 @@ const Footer = () => {
         {/* Logo & Info Section */}
         <div className="w-full md:w-1/4 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
           <a className="flex title-font font-medium items-center justify-center md:justify-start text-gray-900">
-            <img
+            <Image
               src="/image/logo2.png"
               alt="logo"
               className="h-auto object-cover w-auto max-w-[150px]"

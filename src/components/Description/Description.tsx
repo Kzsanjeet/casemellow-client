@@ -22,9 +22,8 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import Card from '../Cards/Card';
 import Loader from '../Loading/Loader';
 import { toast } from 'sonner';
-import Cookies from "js-cookie";
-import { CartContext } from '@/provider/CartContext';
 import  { LoginUserContext } from '@/provider/LoginContext';
+import Image from 'next/image';
 
 interface Brand {
   _id: string;
@@ -59,8 +58,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const [brandDetails, setBrandDetails] = useState<Brand[]>([]);
   const [similarProduct,setSimilarProduct] = useState<Product[]>([]);
   const [phoneModelDetails, setPhoneModelDetails] = useState<string[]>([]); 
-  const {isLoggedIn, setIsLoggedIn} = useContext(LoginUserContext)!
-  const {cart, setCart} = useContext(CartContext)!
+  const {isLoggedIn} = useContext(LoginUserContext)!
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null)
   
@@ -164,7 +162,6 @@ const Description: React.FC<DescProps> = ({ product }) => {
   
       const data = await response.json();
       if (data.success) {
-        setCart(data.data); // Update the cart context with the new cart data
         toast.success("Added to cart successfully!");
       } else {
         // Handle error gracefully
@@ -179,8 +176,6 @@ const Description: React.FC<DescProps> = ({ product }) => {
   };
   
 
-  
-  
   const handleCoverTypeChange = (type: string) => {
     setSelectedCover((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
@@ -210,7 +205,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-8 flex flex-col items-center">
-              <img src={product.productImage} alt={product.productName} className="w-4/6 h-full object-cover hover:scale-110 duration-500" />
+              <Image src={product.productImage} alt={product.productName} className="w-4/6 h-full object-cover hover:scale-110 duration-500" />
               <Tabs defaultValue="description">
                 <TabsContent value="description" className="mt-4">
                   <h1 className='text-xl'>Description</h1>

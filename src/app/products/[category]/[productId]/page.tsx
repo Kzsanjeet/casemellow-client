@@ -33,36 +33,35 @@ const Page = () => {
     const [error, setError] = useState<string | null>(null);
     const params = useParams();
     const productId = params.productId;
-
-    const getProductDetails = async () => {
-        setLoading(true);
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/${productId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-            });
-    
-            const data = await response.json();
-            
-            if (data.success) {
-                // Ensure productDetails is always an array
-                setProductDetails([data.data]); 
-            } else {
-                setError(data.message === "No products found" ? "no_products" : "Failed to fetch");
-                setProductDetails([]);
-            }
-        } catch (error) {
-            console.error(error);
-            setError('Error fetching product details');
-        } finally {
-            setLoading(false);
-        }
-    };
     
     useEffect(() => {
+        const getProductDetails = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/${productId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                });
+        
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Ensure productDetails is always an array
+                    setProductDetails([data.data]); 
+                } else {
+                    setError(data.message === "No products found" ? "no_products" : "Failed to fetch");
+                    setProductDetails([]);
+                }
+            } catch (error) {
+                console.error(error);
+                setError('Error fetching product details');
+            } finally {
+                setLoading(false);
+            }
+        };
         getProductDetails();
     }, [productId]);
 

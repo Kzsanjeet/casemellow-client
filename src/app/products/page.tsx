@@ -656,48 +656,84 @@ const ProductPage = () => {
   }, [selectedBrand])
 
   // Fetch products with filters
-  const fetchProduct = async () => {
-    setLoading(true)
-    setError(null)
+  // const fetchProduct = async () => {
+  //   setLoading(true)
+  //   setError(null)
 
-    try {
-      let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}`
+  //   try {
+  //     let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}`
 
-      if (debouncedSearch) url += `&search=${debouncedSearch}`
-      if (brand) url += `&brand=${brand}`
-      if (category) url += `&category=${category}`
-      if (phoneModel) url += `&phoneModel=${phoneModel}`
-      if (sort) url += `&sort=${sort}`
-      if (isActive !== undefined) url += `&isActive=${isActive}`
+  //     if (debouncedSearch) url += `&search=${debouncedSearch}`
+  //     if (brand) url += `&brand=${brand}`
+  //     if (category) url += `&category=${category}`
+  //     if (phoneModel) url += `&phoneModel=${phoneModel}`
+  //     if (sort) url += `&sort=${sort}`
+  //     if (isActive !== undefined) url += `&isActive=${isActive}`
 
-      const response = await fetch(url, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      })
+  //     const response = await fetch(url, {
+  //       method: "GET",
+  //       headers: { "Content-Type": "application/json" },
+  //     })
 
-      const data = await response.json()
+  //     const data = await response.json()
 
-      if (data.success) {
-        setProductDetails(data.data || [])
-        setTotalPages(data.pagination.totalPages || 1)
-        setCurrentPage(data.pagination.currentPage || 1)
-      } else {
-        setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
-        setProductDetails([])
-      }
-    } catch (error) {
-      setError("Failed to load products")
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  //     if (data.success) {
+  //       setProductDetails(data.data || [])
+  //       setTotalPages(data.pagination.totalPages || 1)
+  //       setCurrentPage(data.pagination.currentPage || 1)
+  //     } else {
+  //       setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
+  //       setProductDetails([])
+  //     }
+  //   } catch (error) {
+  //     setError("Failed to load products")
+  //     console.error(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   // Fetch products when filters change or page changes
   useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true)
+      setError(null)
+  
+      try {
+        let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}`
+  
+        if (debouncedSearch) url += `&search=${debouncedSearch}`
+        if (brand) url += `&brand=${brand}`
+        if (category) url += `&category=${category}`
+        if (phoneModel) url += `&phoneModel=${phoneModel}`
+        if (sort) url += `&sort=${sort}`
+        if (isActive !== undefined) url += `&isActive=${isActive}`
+  
+        const response = await fetch(url, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        })
+  
+        const data = await response.json()
+  
+        if (data.success) {
+          setProductDetails(data.data || [])
+          setTotalPages(data.pagination.totalPages || 1)
+          setCurrentPage(data.pagination.currentPage || 1)
+        } else {
+          setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
+          setProductDetails([])
+        }
+      } catch (error) {
+        setError("Failed to load products")
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchProduct()
-  }, [debouncedSearch, brand, category, phoneModel, sort, isActive, currentPage])
-
+  }, [debouncedSearch, brand, category, phoneModel, sort, isActive, currentPage]);
+  
   // Handle brand selection
   const handleBrandChange = (value: string) => {
     setBrand(value)

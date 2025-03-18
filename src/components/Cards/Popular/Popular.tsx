@@ -4,8 +4,6 @@ import Loader from "@/components/Loading/Loader";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
@@ -42,47 +40,83 @@ const Popular = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const itemsPerPage = 8;
 
-  const fetchProduct = async () => {
-    setLoading(true)
-    setError(null)
+  // const fetchProduct = async () => {
+  //   setLoading(true)
+  //   setError(null)
 
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-popular?page=${currentPage}&limit=${itemsPerPage}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            },
-        }
-      )
+  //   try {
+  //     const response = await fetch(
+  //       `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-popular?page=${currentPage}&limit=${itemsPerPage}`,
+  //       {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           },
+  //       }
+  //     )
 
-      const data = await response.json()
+  //     const data = await response.json()
 
-      if (data.success) {
-        setProductDetails(data.data || [])
-        setTotalPages(data.totalPages || 1)
-        setTotalProducts(data.totalProducts || 0)
-        setCurrentPage(data.currentPage || 1)
-      } else {
-        setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
-        setProductDetails([])
-      }
-    } catch (error) {
-      setError("Failed to load products")
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  //     if (data.success) {
+  //       setProductDetails(data.data || [])
+  //       setTotalPages(data.totalPages || 1)
+  //       setTotalProducts(data.totalProducts || 0)
+  //       setCurrentPage(data.currentPage || 1)
+  //     } else {
+  //       setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
+  //       setProductDetails([])
+  //     }
+  //   } catch (error) {
+  //     setError("Failed to load products")
+  //     console.error(error)
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      setLoading(true)
+      setError(null)
+  
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-popular?page=${currentPage}&limit=${itemsPerPage}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              },
+          }
+        )
+  
+        const data = await response.json()
+  
+        if (data.success) {
+          setProductDetails(data.data || [])
+          setTotalPages(data.totalPages || 1)
+          setTotalProducts(data.totalProducts || 0)
+          setCurrentPage(data.currentPage || 1)
+        } else {
+          setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
+          setProductDetails([])
+        }
+      } catch (error) {
+        setError("Failed to load products")
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    }
+  
     fetchProduct()
   }, [currentPage]) //Fixed: Added currentPage dependency
 
   const handlePageChange = (page: number) => {
     setCurrentPage(Math.max(1, Math.min(page, totalPages)))
 }
+
+console.log(totalProducts)
 
   return (
     <div className="py-12 sm:p-6 md:p-8 flex flex-col items-center">

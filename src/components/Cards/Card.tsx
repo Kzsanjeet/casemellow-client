@@ -1,7 +1,6 @@
-import Image from "next/image";
 import { motion } from "motion/react"
+import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 
 interface Brand {
   _id: string;
@@ -31,8 +30,8 @@ const Card: React.FC<CardProps> = ({ product }) => {
   if (!product) return null; // Prevents error if product is undefined
   const discountRate = 15 / 100;
   const priceBeforeDiscount = (product.productPrice / (1 - discountRate)).toFixed(0); // Correct calculation
-  const params = useParams();
-  const category = params.category;
+  // const params = useParams();
+  // const category = params.category;
 
   return (
     <Link href={`/products/${product.productCategory.toLowerCase()}/${product._id}`}>
@@ -42,7 +41,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
       transition={{duration: 0.5, delay: 0.5}}
       className="w-80 h-[420px] bg-white rounded-2xl overflow-hidden shadow-lg transition-all hover:shadow-xl">
         <div className="relative">
-          <img
+          <Image
             src={product.productImage || "/placeholder.png"} // Default fallback image
             width={320}
             height={320}

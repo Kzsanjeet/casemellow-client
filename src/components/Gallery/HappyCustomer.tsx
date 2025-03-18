@@ -27,7 +27,7 @@ const TwoHeightMasonryGallery = () => {
             <span className="block bg-red-500 h-1 w-full absolute left-0 bottom-0"></span>
           </h1>
           <p className="text-lg sm:text-xl sm:mt-2 font-medium text-gray-700">
-            See our customers' reviews and many more
+            See our customers&apos; reviews and many more
           </p>
         </div>
 

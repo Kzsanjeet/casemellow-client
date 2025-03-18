@@ -221,11 +221,12 @@
 
 
 "use client"
-import React, { useContext, useEffect, useState } from 'react';
-import { Heart, Trash2, MapPin, ChevronRight } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Trash2, MapPin } from 'lucide-react';
 import Cookies from "js-cookie";
 import { toast } from 'sonner';
-import { CartContext } from '@/provider/CartContext';
+import Image from 'next/image';
+
 
 
 export interface CartItem {
@@ -260,7 +261,6 @@ interface CartProps {
 
 export default function Cart({ clientId }: CartProps) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const {cart,setCart} = useContext(CartContext)!;
   const [loading, setLoading] = useState(false);
 
   // const fetchUserData = async () => {
@@ -301,40 +301,61 @@ export default function Cart({ clientId }: CartProps) {
   //   fetchUserData();
   // }, [isLoggedIn]);
   
-  const fetchCartDetails = async () => {
-    setLoading(true);
-    try {
-      const fetchData = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${clientId}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${clientId}`,
-        },
-        credentials: 'include',
-      });
+  // const fetchCartDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const fetchData = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${clientId}`, {
+  //       method: 'GET',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Authorization': `Bearer ${clientId}`,
+  //       },
+  //       credentials: 'include',
+  //     });
       
-      const data = await fetchData.json();
-      console.log('Fetched Data:', data); // Add this line to inspect the response
-  
-      if (data.success) {
-        setItems(data.data);
-        setCart(data.data); // Make sure the cart context is updating as well
-      } else {
-        toast.error(data.message || "Failed to fetch cart details");
-      }
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     const data = await fetchData.json();
+    
+  //     if (data.success) {
+  //       setItems(data.data);
+  //     } else {
+  //       toast.error(data.message || "Failed to fetch cart details");
+  //     }
+  //   } catch (error) {
+  //     toast.error("Something went wrong");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   
 
   useEffect(() => {
+    const fetchCartDetails = async () => {
+      setLoading(true);
+      try {
+        const fetchData = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${clientId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${clientId}`,
+          },
+          credentials: 'include',
+        });
+        
+        const data = await fetchData.json();
+      
+        if (data.success) {
+          setItems(data.data);
+        } else {
+          toast.error(data.message || "Failed to fetch cart details");
+        }
+      } catch (error) {
+        toast.error("Something went wrong", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCartDetails();
   }, [clientId]);
-
-  console.log(items)
 
   const handleDeleteItem = async (itemId: string) => {
     const clientId = Cookies.get("accessToken"); 
@@ -357,6 +378,7 @@ export default function Cart({ clientId }: CartProps) {
         toast.success('Item removed successfully');
       }
     } catch (error) {
+      console.log(error)
       toast.error('Failed to remove item');
     }
   };
@@ -384,14 +406,14 @@ export default function Cart({ clientId }: CartProps) {
             {/* Cart Items */}
             {loading ? (
               <div className="p-4 text-center text-gray-500">Loading cart items...</div>
-            ) : items.length === 0 ? (
+            ) : items.length === 0  ? (
               <div className="p-4 text-center text-gray-500">Your cart is empty.</div>
             ) : (
               <div>
                 {items.map((item) => (
                   <div key={item._id} className="flex justify-between items-center py-4 border-b">
                     <div className="flex items-center gap-4">
-                      <img src={item.productId.productImage} alt={item.productId.productName} className="w-16 h-16 object-cover" />
+                      <Image src={item.productId.productImage} alt={item.productId.productName} className="w-16 h-16 object-cover" />
                       <div>
                         <p className="font-medium">{item.productId.productName}</p>
                         <p className="text-sm text-gray-500">{item.phoneModel} - {item.coverType}</p>
@@ -423,7 +445,7 @@ export default function Cart({ clientId }: CartProps) {
               <h3 className="text-sm font-medium text-gray-700 mb-2">Location</h3>
               <div className="flex items-start gap-2">
                 <MapPin size={18} className="text-gray-500 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-gray-600">Airport, Kathmandu Metro 9 - Sinamangal Area, Bagmati Province</p>
+                <p className="text-sm text-gray-600">Airport Kathmandu Metro 9  Sinamangal Area Bagmati Province</p>
               </div>
             </div>
 

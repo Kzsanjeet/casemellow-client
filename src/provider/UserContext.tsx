@@ -1,5 +1,42 @@
-// "use client"
-// import React, { createContext, FC, ReactNode, useState } from "react";
+// // "use client"
+// // import React, { createContext, FC, ReactNode, useState } from "react";
+
+// // // Define user type
+// // interface User {
+// //   _id: string;
+// //   name: string;
+// //   email: string;
+// //   number?: string;
+// // }
+
+// // // Define context type
+// // interface UserContextType {
+// //   user: User | null;
+// //   setUser: (user: User | null) => void;
+// // }
+
+// // // Create context with a default empty object
+// // export const UserContext = createContext<UserContextType>({
+// //   user: null,
+// //   setUser: () => {},
+// // });
+
+// // // Provider component
+// // const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
+// //   const [user, setUser] = useState<User | null>(null);
+
+// //   return (
+// //     <UserContext.Provider value={{ user, setUser }}>
+// //       {children}
+// //     </UserContext.Provider>
+// //   );
+// // };
+
+// // export default UserProvider;
+
+
+// "use client";
+// import React, { createContext, FC, ReactNode, useState, useEffect } from "react";
 
 // // Define user type
 // interface User {
@@ -23,7 +60,24 @@
 
 // // Provider component
 // const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
+//   // Initialize user state, load from localStorage if available
 //   const [user, setUser] = useState<User | null>(null);
+
+//   useEffect(()=>{
+//     const storedUser = localStorage.getItem("user");
+//     if(storedUser){
+//       setUser(JSON.parse(storedUser))
+//     }
+//   },[])
+
+//   // Save user to localStorage whenever it changes
+//   useEffect(() => {
+//     if (user) {
+//       localStorage.setItem("user", JSON.stringify(user)); // Save to localStorage
+//     } else {
+//       localStorage.removeItem("user"); // Remove from localStorage if user is null
+//     }
+//   }, [user]);
 
 //   return (
 //     <UserContext.Provider value={{ user, setUser }}>
@@ -35,55 +89,50 @@
 // export default UserProvider;
 
 
-"use client";
-import React, { createContext, FC, ReactNode, useState, useEffect } from "react";
 
-// Define user type
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  number?: string;
-}
 
-// Define context type
-interface UserContextType {
-  user: User | null;
-  setUser: (user: User | null) => void;
-}
 
-// Create context with a default empty object
-export const UserContext = createContext<UserContextType>({
-  user: null,
-  setUser: () => {},
-});
+// "use client"
+// import React, { createContext, FC, ReactNode, useState } from "react";
 
-// Provider component
-const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  // Initialize user state, load from localStorage if available
-  const [user, setUser] = useState<User | null>(null);
+// export interface ICart {
+//     _id: string; 
+//     clientId: string;
+//     productId: {
+//       _id: string;
+//       name: string;
+//       price: number;
+//       imageUrl: string;
+//     };
+//     brandName: string;
+//     phoneModel: string;
+//     coverType: string;
+//     quantity: number;
+//     cartDate?: string;
+//     createdAt?: string;
+//     updatedAt?: string;
+//   }
+// // Define context type
+// interface CartContextType {
+//   cart: ICart | null;
+//   setCart: (cart: ICart | null) => void;
+// }
 
-  useEffect(()=>{
-    const storedUser = localStorage.getItem("user");
-    if(storedUser){
-      setUser(JSON.parse(storedUser))
-    }
-  },[])
+// // Create context with a default empty object
+// export const CartContext = createContext<CartContextType>({
+//   cart: null,
+//   setCart: () => {},
+// });
 
-  // Save user to localStorage whenever it changes
-  useEffect(() => {
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user)); // Save to localStorage
-    } else {
-      localStorage.removeItem("user"); // Remove from localStorage if user is null
-    }
-  }, [user]);
+// // Provider component
+// const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
+//   const [cart, setCart] = useState<ICart | null>(null);
 
-  return (
-    <UserContext.Provider value={{ user, setUser }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
+//   return (
+//     <CartContext.Provider value={{ cart, setCart }}>
+//       {children}
+//     </CartContext.Provider>
+//   );
+// };
 
-export default UserProvider;
+// export default CartProvider;

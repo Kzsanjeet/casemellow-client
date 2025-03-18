@@ -4,7 +4,7 @@ import Cart from "@/components/Cart/Cart";
 import Footer from "@/components/Footer/Footer";
 import Nav from "@/components/Nav/Nav";
 import { useParams, useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React from "react";
 
 const Page = () => {
     const params = useParams();
