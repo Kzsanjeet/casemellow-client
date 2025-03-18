@@ -387,6 +387,8 @@ const Nav = () => {
               <Link href="home" className="text-orange-700 no-underline hover:text-gray-300 hover:duration-500">
                 <Image
                   className={`h-auto overflow-hidden w-40 sm:w-44 md:w-48 transition-all duration-300`}
+                  width={80}
+                  height={80}
                   src="/image/logo2.png"
                   alt="Casemellow"
                 />
@@ -470,6 +472,8 @@ const Nav = () => {
                     <span className="sr-only">Open user menu</span>
                     <Image
                       className="size-8 rounded-full"
+                      height={20}
+                      width={20}
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                       alt="User Avatar"
                     />

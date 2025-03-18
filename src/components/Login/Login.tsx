@@ -169,6 +169,7 @@ import { LoginUserContext } from "@/provider/LoginContext";
 import Loader from "../Loading/Loader";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 interface LoginModalProps {
     loginOpen: boolean;
@@ -181,6 +182,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
     const [loading, setLoading] = useState(false);
     // const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
     const { setIsLoggedIn } = useContext(LoginUserContext)!;
 
     // Handle form submission
@@ -202,6 +204,11 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                 toast.success("Login successful");
                 setIsLoggedIn(true);
                 onLoginChange(false); 
+                 // Redirect to home or to the previously saved path
+                 localStorage.setItem("userDetails",JSON.stringify(data.data))
+                 const redirectPath = localStorage.getItem("redirectAfterLogin") || "/home";
+                 localStorage.removeItem("redirectAfterLogin");
+                 router.push(redirectPath);
             } else {
                 toast.error(data.message || "Login failed.");
                 setIsLoggedIn(false);

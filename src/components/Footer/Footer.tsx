@@ -11,6 +11,8 @@ const Footer = () => {
           <a className="flex title-font font-medium items-center justify-center md:justify-start text-gray-900">
             <Image
               src="/image/logo2.png"
+              height={150}
+              width={150}
               alt="logo"
               className="h-auto object-cover w-auto max-w-[150px]"
             />

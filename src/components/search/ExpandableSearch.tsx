@@ -71,7 +71,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter} from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, X } from "lucide-react";
@@ -85,7 +85,6 @@ const ExpandableSearch: React.FC<SearchModalProps> = ({ isOpen, onOpenChange }) 
     const [searchQuery, setSearchQuery] = useState("");
     const router = useRouter();
     const inputRef = useRef<HTMLInputElement>(null);
-
     // Focus input when `isOpen` becomes true
     useEffect(() => {
         if (isOpen && inputRef.current) {

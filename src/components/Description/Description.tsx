@@ -205,7 +205,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             <div className="lg:w-1/2 p-8 flex flex-col items-center">
-              <Image src={product.productImage} alt={product.productName} className="w-4/6 h-full object-cover hover:scale-110 duration-500" />
+              <Image src={product.productImage} width={400} height={400} alt={product.productName} className="w-4/6 h-full object-cover hover:scale-110 duration-500" />
               <Tabs defaultValue="description">
                 <TabsContent value="description" className="mt-4">
                   <h1 className='text-xl'>Description</h1>

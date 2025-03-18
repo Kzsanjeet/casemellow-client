@@ -413,7 +413,7 @@ export default function Cart({ clientId }: CartProps) {
                 {items.map((item) => (
                   <div key={item._id} className="flex justify-between items-center py-4 border-b">
                     <div className="flex items-center gap-4">
-                      <Image src={item.productId.productImage} alt={item.productId.productName} className="w-16 h-16 object-cover" />
+                      <Image width={60} height={60} src={item.productId.productImage} alt={item.productId.productName} className="w-16 h-16 object-cover" />
                       <div>
                         <p className="font-medium">{item.productId.productName}</p>
                         <p className="text-sm text-gray-500">{item.phoneModel} - {item.coverType}</p>
