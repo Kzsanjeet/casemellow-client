@@ -387,8 +387,8 @@ const Nav = () => {
               <Link href="home" className="text-orange-700 no-underline hover:text-gray-300 hover:duration-500">
                 <Image
                   className={`h-auto overflow-hidden w-40 sm:w-44 md:w-48 transition-all duration-300`}
-                  width={80}
-                  height={80}
+                  width={120}
+                  height={120}
                   src="/image/logo2.png"
                   alt="Casemellow"
                 />
