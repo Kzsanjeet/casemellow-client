@@ -1012,11 +1012,12 @@
 
 "use client"
 import React, { FormEvent, useEffect, useState } from 'react';
-import { Trash2, MapPin } from 'lucide-react';
+import { Trash2, MapPin, ChevronRight } from 'lucide-react';
 import Cookies from "js-cookie";
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../ui/breadcrumb';
 
 
 export interface CartItem {
@@ -1081,7 +1082,7 @@ export default function Cart({ clientId }: CartProps) {
   const [pickupAddress, setPickupAddress] = useState("")
   const [deliveryAddress, setDeliveryAddress] = useState("")
   const [promoCode,setPromoCode] = useState("")
-  const [orderData, setOrderData] = useState<IOrder[]>([]);
+  const [oderData, setOrderData] = useState<IOrder[]>([]);
   const router = useRouter();  // Initialize router
 
 
@@ -1121,21 +1122,21 @@ useEffect(() => {
 }, [clientId]);
 
 //fetch user order 
-useEffect(()=>{
-  const getUserOrderData = async() =>{
-    const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/get?clientId=${clientId}`,{
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    })
-    const data = await response.json()
-    if(data.success){
-      setOrderData(data.orderData)
-    }else{
-      console.log(data.message)
-    }
-  }
-  getUserOrderData()
-},[clientId])
+// useEffect(()=>{
+//   const getUserOrderData = async() =>{
+//     const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/get?clientId=${clientId}`,{
+//       method: "GET",
+//       headers: { "Content-Type": "application/json" },
+//     })
+//     const data = await response.json()
+//     if(data.success){
+//       setOrderData(data.orderData)
+//     }else{
+//       console.log(data.message)
+//     }
+//   }
+//   getUserOrderData()
+// },[clientId])
 
 // const handleOrderPlacement = async (e?: FormEvent) => {
 //   if (e) e.preventDefault(); // Prevent default only if event is provided
@@ -1186,7 +1187,7 @@ useEffect(()=>{
 const handleOrderPlacement = async (e?: FormEvent) => {
   if (e) e.preventDefault();
 
-  if (!number || !deliveryAddress) {
+  if (!number || !deliveryAddress ||  !pickupAddress) {
     toast.error("Please fill in required delivery information");
     return { success: false };
   }
@@ -1220,9 +1221,14 @@ const handleOrderPlacement = async (e?: FormEvent) => {
     if (data.success) {
       router.push(`/payment?orderId=${data.data._id}&total=${total}`);
       setOrderData(data.data)
-      
-
-      
+      setPickupAddress("")
+      setNumber("");
+      setDeliveryAddress("");
+      setSelectedItems([]);
+      setPromoCode("");
+      setTotal(0);
+      setLoading(false);
+      toast.success("Order placed successfully");
       return { success: true };
     } else {
       toast.error( "Failed to place order");
@@ -1239,8 +1245,7 @@ const handleOrderPlacement = async (e?: FormEvent) => {
 
 
 
-  const handleDeleteItem = async (itemId: string) => {
-    // const clientId = Cookies.get("accessToken"); 
+  const handleDeleteItem = async (itemId: string) => {; 
     if (!clientId) {
       toast.error("Client ID not found!");
       return;
@@ -1333,7 +1338,6 @@ const handleOrderPlacement = async (e?: FormEvent) => {
       return;
     }
 
-    const clientId = Cookies.get("accessToken");
     if (!clientId) {
       toast.error("Client ID not found!");
       return;
@@ -1395,6 +1399,24 @@ const getTotalPrice = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 mt-20">
+      <div className="max-w-7xl mx-auto">
+      <Breadcrumb className="mb-8">
+       <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator><ChevronRight className="h-4 w-4" /></BreadcrumbSeparator>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/products">Products</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator><ChevronRight className="h-4 w-4" /></BreadcrumbSeparator>
+                  {/* <BreadcrumbItem>
+                    <BreadcrumbPage>{product.productName}</BreadcrumbPage>
+                  </BreadcrumbItem> */}
+                </BreadcrumbList>
+              </Breadcrumb>       
+      </div>
+         
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items Section */}
         <div className="lg:col-span-2">
@@ -1485,6 +1507,7 @@ const getTotalPrice = () => {
                   <textarea 
                     id="pickupAddress" 
                     value={pickupAddress}
+                    required
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm" 
                     placeholder="Enter pickup address"
                     onChange={(e)=>setPickupAddress(e.target.value)}

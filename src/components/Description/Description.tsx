@@ -61,6 +61,8 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const {isLoggedIn} = useContext(LoginUserContext)!
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null)
+  const [cartContext,setCartContext] = useState(false)
+  const [cart,setCart] = useState<[]>([])
   
   useEffect(() => {
     const getBrandName = async () => {
@@ -129,13 +131,11 @@ const Description: React.FC<DescProps> = ({ product }) => {
 
 
   const handleAddToCart = async () => {
-    console.log("desc", isLoggedIn)
     if (!isLoggedIn) {
       toast.error("Please log in to add items to the cart");
       return;
     }
-  
-    console.log('Product ID:', product._id); // Log product ID for debugging
+
     if (!product._id) {
       toast.error("Product ID is missing.");
       return;
@@ -162,7 +162,10 @@ const Description: React.FC<DescProps> = ({ product }) => {
   
       const data = await response.json();
       if (data.success) {
-        toast.success("Added to cart successfully!");
+        toast.success("Added to cart successfully!")
+        setCart(data.data)
+        setCartContext(true)
+        localStorage.setItem("cartContext",cartContext.toString())
       } else {
         // Handle error gracefully
         toast.error(data.message || "Failed to add product to cart.");
@@ -174,7 +177,14 @@ const Description: React.FC<DescProps> = ({ product }) => {
       setLoading(false); // Reset loading state
     }
   };
-  
+
+  const handleUpdate = async() =>{
+    try {
+      
+    } catch (error) {
+      
+    }
+  }
 
   const handleCoverTypeChange = (type: string) => {
     setSelectedCover((prev) =>
@@ -279,9 +289,15 @@ const Description: React.FC<DescProps> = ({ product }) => {
                 </div>
 
                   {/* Action Buttons */}
+                {cartContext?(
                 <div className="pt-8 flex w-4/5 items-center justify-start">
+                <Button variant='outline' onClick={handleAddToCart} className="w-2/5 text-black font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span>Already on Cart</Button>
+              </div>
+                ):(
+                  <div className="pt-8 flex w-4/5 items-center justify-start">
                   <Button onClick={handleAddToCart} className="w-2/5 text-white font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span> Add to Cart</Button>
                 </div>
+                )}
               </div>
               </div>
             </div>

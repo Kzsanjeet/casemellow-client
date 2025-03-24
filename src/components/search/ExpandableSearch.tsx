@@ -108,7 +108,7 @@ const ExpandableSearch: React.FC<SearchModalProps> = ({ isOpen, onOpenChange }) 
 
     return (
         <div
-    className={`fixed top-20 left-1/2 transform -translate-x-1/2 w-[300px] sm:w-[500px] flex justify-center items-center z-[9998] transition-all duration-700 ease-in-out 
+    className={`fixed top-20 sm:top-24 left-1/2 transform -translate-x-1/2 w-[300px] sm:w-[500px] flex justify-center items-center z-[9998] transition-all duration-700 ease-in-out 
         ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"}`}
 >
     <form

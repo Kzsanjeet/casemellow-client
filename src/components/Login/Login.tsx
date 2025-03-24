@@ -203,7 +203,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
             if (response.ok) {
                 toast.success("Login successful");
                 setIsLoggedIn(true);
-                onLoginChange(false); 
+                onLoginChange(false);    
                  // Redirect to home or to the previously saved path
                  localStorage.setItem("userDetails",JSON.stringify(data.data))
                  const redirectPath = localStorage.getItem("redirectAfterLogin") || "/home";

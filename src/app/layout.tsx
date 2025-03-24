@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LoginContext>
-          <Toaster/>
+          <Toaster position="top-right"/>
           {children}
           <ScrollToTop/>
         </LoginContext>
