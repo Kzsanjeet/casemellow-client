@@ -600,7 +600,7 @@ const Nav = () => {
   const [orderCount, setOrderCount] = useState(null)
   const { setIsLoggedIn } = useContext(LoginUserContext)!;
   const router = useRouter();
-  // const { user } = useContext(UserContext);
+
 
   useEffect(() => {
     let ticking = false
@@ -634,32 +634,33 @@ const Nav = () => {
   useEffect(() => {
     const getUserOrderData = async () => {
       if (!userId) return // Don't fetch if userId is null
+      if (isLoggedIn) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${userId}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          })
   
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${userId}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        })
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`)
+          }
+          const data = await response.json()
   
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`)
+          if (data.success && Array.isArray(data.data)) {
+            setOrderCount(data.data.length) // Just update state instead of reloading
+          } else {
+            setOrderCount(0)
+          }
+        } catch (error) {
+          console.error("Error fetching user order data:", error)
         }
-        const data = await response.json()
-  
-        if (data.success && Array.isArray(data.data)) {
-          setOrderCount(data.data.length)
-        } else {
-          setOrderCount(0) // Ensure orderCount is set even on failure
-        }
-      } catch (error) {
-        console.error("Error fetching user order data:", error)
       }
     }
   
     getUserOrderData()
-  }, [userId]) // Dependency array ensures re-fetch when userId changes
+  }, [userId, isLoggedIn]) // Also depend on isLoggedIn
+  // Dependency array ensures re-fetch when userId changes
   
-
   // handle the search click
   const handleSearch = () => {
     setIsOpen(!isOpen)
@@ -837,7 +838,7 @@ const Nav = () => {
                 </button>
               ) : (
                 <div className="flex space-x-4 sm:ml-4">
-                  <p className="text-sm text-gray-300 hover:text-white cursor-pointer" onClick={handleLoginModel}>
+                  <p className="text-[15px] sm:text-xl pl-3 text-gray-300 hover:text-white cursor-pointer" onClick={handleLoginModel}>
                     Login
                   </p>
                 </div>

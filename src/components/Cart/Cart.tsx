@@ -1011,13 +1011,14 @@
 
 
 "use client"
-import React, { FormEvent, useEffect, useState } from 'react';
-import { Trash2, MapPin, ChevronRight } from 'lucide-react';
-import Cookies from "js-cookie";
+import React, { FormEvent, useContext, useEffect, useState } from 'react';
+import { Trash2, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '../ui/breadcrumb';
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from '../ui/breadcrumb';
+import { CartContext } from '@/provider/CartContext';
+import Link from 'next/link';
 
 
 export interface CartItem {
@@ -1084,6 +1085,7 @@ export default function Cart({ clientId }: CartProps) {
   const [promoCode,setPromoCode] = useState("")
   const [oderData, setOrderData] = useState<IOrder[]>([]);
   const router = useRouter();  // Initialize router
+  const {setIsCart} = useContext(CartContext)!
 
 
   const fetchCartDetails = async () => {
@@ -1121,68 +1123,6 @@ useEffect(() => {
     fetchCartDetails();
 }, [clientId]);
 
-//fetch user order 
-// useEffect(()=>{
-//   const getUserOrderData = async() =>{
-//     const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/get?clientId=${clientId}`,{
-//       method: "GET",
-//       headers: { "Content-Type": "application/json" },
-//     })
-//     const data = await response.json()
-//     if(data.success){
-//       setOrderData(data.orderData)
-//     }else{
-//       console.log(data.message)
-//     }
-//   }
-//   getUserOrderData()
-// },[clientId])
-
-// const handleOrderPlacement = async (e?: FormEvent) => {
-//   if (e) e.preventDefault(); // Prevent default only if event is provided
-//   setLoading(true);
-
-//   try {
-//     const addShippingData = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order`, {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({
-//         clientId,
-//         pickUpAddress: pickupAddress,
-//         deliveryAddress,
-//         promoCode,
-//         totalPrice: total,
-//         cartId: [...selectedItems],
-//         number: number || "",
-//         paymentMethod: "Khalti",
-//       }),
-//     });
-
-//     const data = await addShippingData.json();
-//     console.log("Order Response:", data);
-
-//     if (data.success) {
-//       toast.success("Order placed successfully!");
-//       // Extract orderId 
-//       const orderSpecific = orderData.find((ord) => ord.clientId === clientId);
-//       const orderId = orderSpecific?._id || data.orderId; // Fallback to API response
-//       console.log(orderId)
-//       if (!orderId) {
-//         toast.error("Order ID not found.");
-//         return;
-//       }
-//       router.push(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/payment?orderId=${orderId}&total=${total}`);
-//     }
-//     return data;
-//   } catch (error) {
-//     console.error("Error in API request:", error);
-//     toast.error("Failed to place order.");
-//     return { success: false };
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
 
 const handleOrderPlacement = async (e?: FormEvent) => {
   if (e) e.preventDefault();
@@ -1211,7 +1151,7 @@ const handleOrderPlacement = async (e?: FormEvent) => {
         totalPrice: total,
         cartId: [...selectedItems],
         number: number,
-        paymentMethod: "Khalti",
+        paymentMethod: "",
       }),
     });
 
@@ -1264,6 +1204,7 @@ const handleOrderPlacement = async (e?: FormEvent) => {
         setItems((prevItems) => prevItems.filter(item => item._id !== itemId));
         // Also remove from selected items if it was selected
         setSelectedItems(prev => prev.filter(id => id !== itemId));
+        setIsCart(false)
         toast.success('Item removed successfully');
       }
     } catch (error) {
@@ -1398,7 +1339,7 @@ const getTotalPrice = () => {
   
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-20">
+    <div className="min-h-screen bg-gray-50 py-5 mt-20">
       <div className="max-w-7xl mx-auto">
       <Breadcrumb className="mb-8">
        <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
@@ -1456,7 +1397,9 @@ const getTotalPrice = () => {
                         checked={item.selected || false}
                         onChange={() => toggleSelectItem(item._id)}
                       />
+                      <Link href={`/products/${item.productId.productCategory}/${item.productId._id}`}>
                       <Image width={60} height={60} src={item.productId.productImage} alt={item.productId.productName} className="w-16 h-16 object-cover" />
+                      </Link>
                       <div>
                         <p className="font-medium">{item.productId.productName}</p>
                         <p className="text-sm text-gray-500">{item.phoneModel} - {item.coverType}</p>

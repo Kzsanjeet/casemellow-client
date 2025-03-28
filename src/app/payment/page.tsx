@@ -167,7 +167,7 @@ export default function Payment() {
       id: 'khalti',
       title: 'Khalti',
       subtitle: 'Khalti Digital Wallet',
-      icon: '/khalti-icon.svg'
+      icon: '/image/khalti.png'
     }
   ];
 

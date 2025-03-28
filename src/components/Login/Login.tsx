@@ -209,6 +209,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                  const redirectPath = localStorage.getItem("redirectAfterLogin") || "/home";
                  localStorage.removeItem("redirectAfterLogin");
                  router.push(redirectPath);
+                 window.location.reload()
             } else {
                 toast.error(data.message || "Login failed.");
                 setIsLoggedIn(false);
@@ -236,7 +237,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
             <p className="text-gray-500 text-center">Login to <span className="text-red-700 font-semibold">Casemellow</span></p>
             
             <Button variant="outline" className="w-full flex items-center justify-center space-x-2 border-gray-300" onClick={() => toast.info("Google login coming soon!")}>  
-            <Image src="/google.png" className="w-10 mix-blend-multiply" width={40} height={40} alt="Google Logo" />
+            <Image src={"/image/google.png"} className="w-10 mix-blend-multiply" width={30} height={30} alt="Google Logo" />
                 <span>Continue with Google</span>
             </Button>
 

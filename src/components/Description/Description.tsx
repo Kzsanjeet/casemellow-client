@@ -24,6 +24,7 @@ import Loader from '../Loading/Loader';
 import { toast } from 'sonner';
 import  { LoginUserContext } from '@/provider/LoginContext';
 import Image from 'next/image';
+import { CartContext } from '@/provider/CartContext';
 
 interface Brand {
   _id: string;
@@ -61,12 +62,13 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const {isLoggedIn} = useContext(LoginUserContext)!
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null)
-  const [cartContext,setCartContext] = useState(false)
-  const [cart,setCart] = useState<[]>([])
+  const [cartDetails,setCartDetails] = useState<[]>([])
+  const {isCart, setIsCart} = useContext(CartContext)!
   
   useEffect(() => {
     const getBrandName = async () => {
       setLoading(true);
+      setError(null); // Reset error before fetching
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/brands/get`, {
           method: 'GET',
@@ -76,41 +78,52 @@ const Description: React.FC<DescProps> = ({ product }) => {
         if (data.success) {
           setBrandDetails(data.data);
         } else {
-          console.log(data.message);
+          setError(data.message);
         }
       } catch (error) {
-        console.log(error);
+        setError("Failed to fetch brands. Please try again.");
       } finally {
         setLoading(false);
       }
     };
     getBrandName();
   }, []);
-
+  
   useEffect(() => {
+    if (!selectedBrand) return; // Avoid unnecessary calls when no brand is selected
+    const controller = new AbortController();
+  
     const getPhoneModels = async () => {
-      if (!selectedBrand) return;
       setLoading(true);
+      setError(null);
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-brands-phonemodel?brandid=${selectedBrand}`, {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-brands-phonemodel?brandid=${selectedBrand}`, 
+          {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+            signal: controller.signal,
+          }
+        );
         const data = await response.json();
         if (data.success) {
           setPhoneModelDetails(data.data);
-          
         } else {
-          console.log(data.message);
+          setError(data.message);
         }
       } catch (error) {
-        console.log(error);
+        if (error.name !== "AbortError") {
+          setError("Failed to fetch phone models.");
+        }
       } finally {
         setLoading(false);
       }
     };
+  
     getPhoneModels();
+    return () => controller.abort(); // Cleanup function to prevent memory leaks
   }, [selectedBrand]);
+  
 
   useEffect(()=>{
     const getSimilarProduct = async() =>{
@@ -129,54 +142,54 @@ const Description: React.FC<DescProps> = ({ product }) => {
     getSimilarProduct()
   },[product._id])
 
-
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add items to the cart");
       return;
     }
-
-    if (!product._id) {
-      toast.error("Product ID is missing.");
-      return;
-    }
   
     try {
-      setLoading(true); // Set loading to true while making the API call
+      setLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/add-cart`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // If you have an authentication token, add it to headers
-          // "Authorization": `Bearer ${Cookies.get('authToken')}`, 
         },
-        credentials: "include", // Ensure cookies are sent with the request
+        credentials: "include",
         body: JSON.stringify({
-          productId: product._id,  // Product ID
+          productId: product._id,
           brandName: selectedBrand,
           phoneModel: selectedModel,
-          coverType: selectedCover.join(""), // Combine the selected cover types into a string
+          coverType: selectedCover.join(""),
           quantity: quantity,
         }),
       });
   
       const data = await response.json();
       if (data.success) {
-        toast.success("Added to cart successfully!")
-        setCart(data.data)
-        setCartContext(true)
-        localStorage.setItem("cartContext",cartContext.toString())
+        toast.success("Added to cart successfully!");
+        setCartDetails(data.data);
+        console.log(cartDetails)
+        setIsCart(true);
       } else {
-        // Handle error gracefully
         toast.error(data.message || "Failed to add product to cart.");
       }
     } catch (error) {
-      console.error("Error adding to cart:", error); // Log error details
+      console.error("Error adding to cart:", error);
       toast.error("Something went wrong while adding to the cart.");
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
+
+  const handleChangeButton = () =>{
+    const checkIfProductExistInCart = 
+    cartDetails.find((item) => item.productId === product._id);
+    if(checkIfProductExistInCart){
+      setIsCart(true)
+      return;
+      }
+  }
 
   const handleUpdate = async() =>{
     try {
@@ -289,9 +302,9 @@ const Description: React.FC<DescProps> = ({ product }) => {
                 </div>
 
                   {/* Action Buttons */}
-                {cartContext?(
+                {isCart?(
                 <div className="pt-8 flex w-4/5 items-center justify-start">
-                <Button variant='outline' onClick={handleAddToCart} className="w-2/5 text-black font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span>Already on Cart</Button>
+                <Button variant='outline' disabled={true} onClick={handleAddToCart} className="cursor-not-allowed w-2/5 text-black font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span>Already on Cart</Button>
               </div>
                 ):(
                   <div className="pt-8 flex w-4/5 items-center justify-start">

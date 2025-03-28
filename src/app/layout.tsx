@@ -4,6 +4,7 @@ import "./globals.css";
 import ScrollToTop from "@/components/ScrollUp/ScrollToTop";
 import { Toaster } from 'sonner';
 import LoginContext from "@/provider/LoginContext";
+import CartProvider, { CartContext } from "@/provider/CartContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,11 +32,13 @@ export default function RootLayout({
       suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <CartProvider>
         <LoginContext>
           <Toaster position="top-right"/>
           {children}
           <ScrollToTop/>
         </LoginContext>
+        </CartProvider>
         
       </body>
     </html>
