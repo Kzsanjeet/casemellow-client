@@ -1151,7 +1151,7 @@ const handleOrderPlacement = async (e?: FormEvent) => {
         totalPrice: total,
         cartId: [...selectedItems],
         number: number,
-        paymentMethod: "",
+        // paymentMethod: "",
       }),
     });
 
@@ -1159,7 +1159,6 @@ const handleOrderPlacement = async (e?: FormEvent) => {
     console.log("Order API Response:", data); // Debugging log
 
     if (data.success) {
-      router.push(`/payment?orderId=${data.data._id}&total=${total}`);
       setOrderData(data.data)
       setPickupAddress("")
       setNumber("");
@@ -1169,6 +1168,7 @@ const handleOrderPlacement = async (e?: FormEvent) => {
       setTotal(0);
       setLoading(false);
       toast.success("Order placed successfully");
+      router.push(`/payment?orderId=${data.data._id}&total=${total}`);
       return { success: true };
     } else {
       toast.error( "Failed to place order");
@@ -1182,7 +1182,6 @@ const handleOrderPlacement = async (e?: FormEvent) => {
     setLoading(false);
   }
 };
-
 
 
   const handleDeleteItem = async (itemId: string) => {; 

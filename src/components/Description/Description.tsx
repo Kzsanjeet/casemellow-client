@@ -148,6 +148,20 @@ const Description: React.FC<DescProps> = ({ product }) => {
       return;
     }
   
+    // Validation checks
+    if (!selectedBrand) {
+      toast.error("Please select a brand");
+      return;
+    }
+    if (!selectedModel) {
+      toast.error("Please select a phone model");
+      return;
+    }
+    if (selectedCover.length === 0) {
+      toast.error("Please select at least one cover type");
+      return;
+    }
+  
     try {
       setLoading(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/add-cart`, {
@@ -169,7 +183,6 @@ const Description: React.FC<DescProps> = ({ product }) => {
       if (data.success) {
         toast.success("Added to cart successfully!");
         setCartDetails(data.data);
-        console.log(cartDetails)
         setIsCart(true);
       } else {
         toast.error(data.message || "Failed to add product to cart.");
@@ -181,15 +194,6 @@ const Description: React.FC<DescProps> = ({ product }) => {
       setLoading(false);
     }
   };
-
-  const handleChangeButton = () =>{
-    const checkIfProductExistInCart = 
-    cartDetails.find((item) => item.productId === product._id);
-    if(checkIfProductExistInCart){
-      setIsCart(true)
-      return;
-      }
-  }
 
   const handleUpdate = async() =>{
     try {

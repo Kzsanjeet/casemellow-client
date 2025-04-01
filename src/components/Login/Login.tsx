@@ -206,10 +206,10 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                 onLoginChange(false);    
                  // Redirect to home or to the previously saved path
                  localStorage.setItem("userDetails",JSON.stringify(data.data))
-                 const redirectPath = localStorage.getItem("redirectAfterLogin") || "/home";
+                 const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
                  localStorage.removeItem("redirectAfterLogin");
                  router.push(redirectPath);
-                 window.location.reload()
+                //  window.location.reload()
             } else {
                 toast.error(data.message || "Login failed.");
                 setIsLoggedIn(false);

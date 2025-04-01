@@ -1,13 +1,52 @@
 "use client";
 import { Button } from '@/components/ui/button';
 import { Home, ShoppingBag, Check } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import Nav from '@/components/Nav/Nav';
 import Footer from '@/components/Footer/Footer';
+import { useEffect } from 'react';
 
 export default function OrderSuccess() {
+  const searchParams = useSearchParams();
   const router = useRouter();
+  const orderId = searchParams.get("purchase_order_id");
+  const codOrderId = searchParams.get("orderId")
+
+  console.log("orderID in success",orderId)
+
+  const updateStatus = async() =>{
+    try {
+      if(orderId){
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${orderId}`,{
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({orderId: orderId}),
+        })
+        const data = await response.json();
+        console.log(data);
+      }else{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${codOrderId}`,{
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({orderId: orderId}),
+        })
+        const data = await response.json();
+        console.log(data);
+      }
+     
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(()=>{
+    updateStatus();
+  },[orderId, codOrderId])
 
   return (
     <div>
