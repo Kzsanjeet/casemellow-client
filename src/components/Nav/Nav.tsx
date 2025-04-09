@@ -578,12 +578,13 @@
 "use client"
 import { Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter} from "next/navigation"
 import { useContext, useEffect, useState } from "react"
 import { LoginUserContext } from "@/provider/LoginContext"
 import ExpandableSearch from "../search/ExpandableSearch"
 import Login from "../Login/Login"
 import Image from "next/image"
+import { OrderCountContext } from "@/provider/CartContext"
 // import { toast, Toaster } from "sonner"
 
 const Nav = () => {
@@ -597,7 +598,7 @@ const Nav = () => {
   const { isLoggedIn } = useContext(LoginUserContext)!
   const [userId, setUserId] = useState(null)
   const [loginCart, setLoginCart] = useState(false)
-  const [orderCount, setOrderCount] = useState(null)
+  const { orderCount, setOrderCount } = useContext(OrderCountContext)!
   const { setIsLoggedIn } = useContext(LoginUserContext)!;
   const router = useRouter();
 
@@ -658,7 +659,7 @@ const Nav = () => {
     }
   
     getUserOrderData()
-  }, [userId, isLoggedIn]) // Also depend on isLoggedIn
+  }, [userId, isLoggedIn, orderCount]) // Also depend on isLoggedIn
   // Dependency array ensures re-fetch when userId changes
   
   // handle the search click
@@ -671,45 +672,23 @@ const Nav = () => {
   }
 
   const handleCartLogin = () => {
-    setLoginCart(true)
-    setLoginOpen(true) // for model opening
-    localStorage.setItem("redirectAfterLogin", `/cart/${userId}`)
-  }
+    setLoginCart(true);
+    setLoginOpen(true); // opens login modal
+    localStorage.setItem("redirectAfterLogin", "/cart"); 
+  };
   
-
   const handleSignOut = () => {
-    setLoginCart(false)
-    setLoginOpen(false)
-    setIsLoggedIn(false)
-    
-    localStorage.removeItem("userDetails")
-    
-    setTimeout(() => {
-      router.push("/") 
-    }, 100) 
-  }
+    router.push("/home");  
+    setIsLoggedIn(false);
+    setOrderCount(0);
+    setLoginCart(false);
+    setLoginOpen(false);
+    localStorage.removeItem("userDetails");
+  };
+  
   
 
   console.log(loginCart)
-  // for the cart click
-  // const handleCartClick = (e: FormEvent) => {
-  //   if (!isLoggedIn) {
-  //       e.preventDefault();
-  //       toast.error("Please log in to access your cart");
-
-  //       console.log("nav test: ", user?._id);
-
-  //       if (user?._id) {
-  //           localStorage.setItem("redirectAfterLogin", `/cart/${user._id}`);
-  //       } else {
-  //           localStorage.setItem("redirectAfterLogin", "/cart");
-  //       }
-
-  //       router.push("/login");
-  //   } else {
-  //       router.push(`/cart/${user?._id}`);
-  //   }
-  // };
 
   return (
     <nav

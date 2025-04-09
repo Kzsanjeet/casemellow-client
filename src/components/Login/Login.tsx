@@ -170,6 +170,7 @@ import Loader from "../Loading/Loader";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { UserContext } from "@/provider/UserContext";
 
 interface LoginModalProps {
     loginOpen: boolean;
@@ -184,12 +185,50 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
     const { setIsLoggedIn } = useContext(LoginUserContext)!;
+    const {setUser} = useContext(UserContext)!;
 
     // Handle form submission
+    // const handleSubmit = async (e: FormEvent) => {
+    //     e.preventDefault();
+    //     setLoading(true);
+
+    //     try {
+    //         const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/client/login`, {
+    //             method: "POST",
+    //             headers: { "Content-Type": "application/json" },
+    //             body: JSON.stringify({ email, password }),
+    //             credentials: "include",
+    //         });
+
+    //         const data = await response.json();
+
+    //         if (response.ok) {
+    //             toast.success("Login successful");
+    //             setIsLoggedIn(true);
+    //             onLoginChange(false);    
+    //              // Redirect to home or to the previously saved path
+    //              localStorage.setItem("userDetails",JSON.stringify(data.data))
+    //              setUser(data.data)
+    //              const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
+    //              localStorage.removeItem("redirectAfterLogin");
+    //              router.push(redirectPath);
+    //             //  window.location.reload()
+    //         } else {
+    //             toast.error(data.message || "Login failed.");
+    //             setIsLoggedIn(false);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error:", error);
+    //         toast.error("An unexpected error occurred. Please try again.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
-
+        
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/client/login`, {
                 method: "POST",
@@ -197,19 +236,32 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                 body: JSON.stringify({ email, password }),
                 credentials: "include",
             });
-
+    
             const data = await response.json();
-
+    
             if (response.ok) {
                 toast.success("Login successful");
                 setIsLoggedIn(true);
-                onLoginChange(false);    
-                 // Redirect to home or to the previously saved path
-                 localStorage.setItem("userDetails",JSON.stringify(data.data))
-                 const redirectPath = localStorage.getItem("redirectAfterLogin") || "/";
-                 localStorage.removeItem("redirectAfterLogin");
-                 router.push(redirectPath);
-                //  window.location.reload()
+                onLoginChange(false);
+    
+                // Save user data and set state
+                localStorage.setItem("userDetails", JSON.stringify(data.data));
+                setUser(data.data);
+    
+                // Get the saved redirect path from localStorage
+                const redirectPath = localStorage.getItem("redirectAfterLogin");
+    
+                // Check if redirectPath exists and contains '/cart', then redirect accordingly
+                if (redirectPath && redirectPath.includes("/cart")) {
+                    // Redirect to cart with user._id appended to the URL
+                    const cartRedirectPath = `/cart/${data.data._id}`;
+                    router.push(cartRedirectPath);
+                } else {
+                    // Fallback redirection (to home or the default page)
+                    router.push(redirectPath || "/");
+                }
+                // Remove redirect path after redirecting
+                localStorage.removeItem("redirectAfterLogin");
             } else {
                 toast.error(data.message || "Login failed.");
                 setIsLoggedIn(false);
@@ -221,6 +273,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
             setLoading(false);
         }
     };
+    
 
     if (!loginOpen) return null; // Hide modal if not open
 

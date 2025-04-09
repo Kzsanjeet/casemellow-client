@@ -24,7 +24,7 @@ import Loader from '../Loading/Loader';
 import { toast } from 'sonner';
 import  { LoginUserContext } from '@/provider/LoginContext';
 import Image from 'next/image';
-import { CartContext } from '@/provider/CartContext';
+import { useRouter } from 'next/navigation';
 
 interface Brand {
   _id: string;
@@ -42,6 +42,7 @@ interface Product {
   productImage: string;
   productCategory: string;
   productView: number;
+  isCart:boolean,
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -63,7 +64,8 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null)
   const [cartDetails,setCartDetails] = useState<[]>([])
-  const {isCart, setIsCart} = useContext(CartContext)!
+  const router = useRouter();
+  const [userId, setUserId] = useState(null);
   
   useEffect(() => {
     const getBrandName = async () => {
@@ -142,6 +144,14 @@ const Description: React.FC<DescProps> = ({ product }) => {
     getSimilarProduct()
   },[product._id])
 
+  useEffect(() => {
+    const userDetails = localStorage.getItem("userDetails");
+    if (userDetails) {
+      const parsedData = JSON.parse(userDetails);
+      setUserId(parsedData._id);
+    }
+  }, []);
+
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add items to the cart");
@@ -183,7 +193,8 @@ const Description: React.FC<DescProps> = ({ product }) => {
       if (data.success) {
         toast.success("Added to cart successfully!");
         setCartDetails(data.data);
-        setIsCart(true);
+        // setIsCart(true);
+        router.push(`/cart/${userId}`)
       } else {
         toast.error(data.message || "Failed to add product to cart.");
       }
@@ -306,15 +317,16 @@ const Description: React.FC<DescProps> = ({ product }) => {
                 </div>
 
                   {/* Action Buttons */}
-                {isCart?(
+                {/* {isCart?(
                 <div className="pt-8 flex w-4/5 items-center justify-start">
                 <Button variant='outline' disabled={true} onClick={handleAddToCart} className="cursor-not-allowed w-2/5 text-black font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span>Already on Cart</Button>
               </div>
-                ):(
+                ):( */}
                   <div className="pt-8 flex w-4/5 items-center justify-start">
                   <Button onClick={handleAddToCart} className="w-2/5 text-white font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span> Add to Cart</Button>
                 </div>
-                )}
+                 {/* )}  */}
+                 
               </div>
               </div>
             </div>

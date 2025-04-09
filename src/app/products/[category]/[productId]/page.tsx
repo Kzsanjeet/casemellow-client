@@ -23,6 +23,7 @@ interface Product {
     productCategory: string;
     productView: number;
     isActive: boolean;
+    isCart:boolean;
     createdAt: string;
     updatedAt: string;
 }

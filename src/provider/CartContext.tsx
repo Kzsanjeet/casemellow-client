@@ -109,37 +109,67 @@
 
 
 
+// "use client";
+// import React, { createContext, useState, useEffect } from "react";
+// import Cookies from "js-cookie";
+
+// interface CartContextType {
+//   isCart: boolean;
+//   setIsCart: (value: boolean) => void;
+// }
+
+// export const CartContext = createContext<CartContextType | undefined>(undefined);
+
+// const CartProvider = ({ children }: { children: React.ReactNode }) => {
+//   const [isCart, setIsCart] = useState<boolean>(() => {
+//     const storedValue = Cookies.get("isCart");
+//     return storedValue === "true"; // Ensure conversion to boolean
+//   });
+
+//   console.log("cart In:", isCart);
+
+//   // Save value to cookies whenever it changes
+//   useEffect(() => {
+//     Cookies.set("isCart", isCart.toString(), { expires: 1 / 144 }); // 10 minutes
+//   }, [isCart]);
+
+//   return (
+//     <CartContext.Provider value={{ isCart, setIsCart }}>
+//       {children}
+//     </CartContext.Provider>
+//   );
+// };
+
+// export default CartProvider;
+
+
 "use client";
 import React, { createContext, useState, useEffect } from "react";
 import Cookies from "js-cookie";
 
-interface CartContextType {
-  isCart: boolean;
-  setIsCart: (value: boolean) => void;
+interface OrderCountContextType {
+  orderCount: number;
+  setOrderCount: (value: number) => void;
 }
 
-export const CartContext = createContext<CartContextType | undefined>(undefined);
+export const OrderCountContext = createContext<OrderCountContextType | undefined>(undefined);
 
-const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isCart, setIsCart] = useState<boolean>(() => {
-    const storedValue = Cookies.get("isCart");
-    return storedValue === "true"; // Ensure conversion to boolean
+const OrderCountProvider = ({ children }: { children: React.ReactNode }) => {
+  const [orderCount, setOrderCount] = useState<number>(() => {
+    const storedValue = Cookies.get("orderCount");
+    return storedValue ? parseInt(storedValue, 10) : 0;
   });
 
-  console.log("cart In:", isCart);
-
-  // Save value to cookies whenever it changes
+  // Save to cookies when orderCount changes
   useEffect(() => {
-    Cookies.set("isCart", isCart.toString(), { expires: 1 / 144 }); // 10 minutes
-  }, [isCart]);
+    Cookies.set("orderCount", orderCount.toString(), { expires: 1 / 144 }); // 10 minutes
+  }, [orderCount]);
 
   return (
-    <CartContext.Provider value={{ isCart, setIsCart }}>
+    <OrderCountContext.Provider value={{ orderCount, setOrderCount }}>
       {children}
-    </CartContext.Provider>
+    </OrderCountContext.Provider>
   );
 };
 
-export default CartProvider;
-
-
+export default OrderCountProvider;

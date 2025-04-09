@@ -10,6 +10,7 @@ import Carousel from '@/components/Slider/Carousel'
 import React from 'react'
 
 const Page = () => {
+    
     return (
         <div className='w-full min-h-screen bg-white'>
             <Nav/>

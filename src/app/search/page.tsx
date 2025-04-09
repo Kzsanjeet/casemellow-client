@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useState, useRef, Suspense } from "react"
-import { useParams} from "next/navigation"
+import { useSearchParams} from "next/navigation"
 import { Filter, X, SearchIcon, ChevronRight} from "lucide-react"
 import Card from "@/components/Cards/Card"
 import Footer from "@/components/Footer/Footer"
@@ -42,11 +42,13 @@ interface Product {
 }
 
 const SearchPage = () => {
-  // const searchParams = useSearchParams()
-  // const query = searchParams.get("q") || ""
+  const searchParams = useSearchParams()
+  const query = searchParams.get("q") || ""
 
-  const searchParams = useParams();
-  const query = searchParams.q || "";
+  // const searchParams = useParams();
+  // const query = searchParams.q || "";
+
+  // console.log("query",query)
 
   const [productDetails, setProductDetails] = useState<Product[]>([])
   const [brand, setBrand] = useState<string>("")
