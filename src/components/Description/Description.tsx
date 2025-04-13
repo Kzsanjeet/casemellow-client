@@ -144,6 +144,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
     getSimilarProduct()
   },[product._id])
 
+  // to get userId
   useEffect(() => {
     const userDetails = localStorage.getItem("userDetails");
     if (userDetails) {
@@ -193,6 +194,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
       if (data.success) {
         toast.success("Added to cart successfully!");
         setCartDetails(data.data);
+        console.log(cartDetails)
         // setIsCart(true);
         router.push(`/cart/${userId}`)
       } else {
