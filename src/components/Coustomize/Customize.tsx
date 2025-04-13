@@ -1,8 +1,10 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const Customize = () => {
+  const router = useRouter();
   return (
     <div className="w-full flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
       <div className="max-w-7xl w-full">
@@ -27,7 +29,7 @@ const Customize = () => {
             <p className="text-lg text-gray-600 mb-6">
               Personalize your case with your own design, photos, and text.
             </p>
-            <Button className="flex items-center space-x-2 bg-red-500 hover:bg-red-600">
+            <Button onClick={(e)=>router.push("/customize")} className="flex items-center space-x-2 bg-red-500 hover:bg-red-600">
               <span>Get Started</span>
               <ArrowRight className="h-5 w-5" />
             </Button>
