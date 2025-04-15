@@ -631,35 +631,42 @@ const Nav = () => {
   }, [])
 
 
-  //cart count
   useEffect(() => {
     const getUserOrderData = async () => {
-      if (!userId) return // Don't fetch if userId is null
+      if (!userId) return; // Don't fetch if userId is null
       if (isLoggedIn) {
         try {
           const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/cart/get/${userId}`, {
             method: "GET",
             headers: { "Content-Type": "application/json" },
-          })
+          });
+  
+          if (response.status === 404) {
+            // Treat 404 as no cart found, set count to 0
+            setOrderCount(0);
+            return;
+          }
   
           if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`)
+            throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          const data = await response.json()
+  
+          const data = await response.json();
   
           if (data.success && Array.isArray(data.data)) {
-            setOrderCount(data.data.length) // Just update state instead of reloading
+            setOrderCount(data.data.length);
           } else {
-            setOrderCount(0)
+            setOrderCount(0);
           }
         } catch (error) {
-          console.error("Error fetching user order data:", error)
+          console.error("Error fetching user order data:", error);
         }
       }
-    }
+    };
   
-    getUserOrderData()
-  }, [userId, isLoggedIn, orderCount]) // Also depend on isLoggedIn
+    getUserOrderData();
+  }, [userId, isLoggedIn]);
+  
   // Dependency array ensures re-fetch when userId changes
   
   // handle the search click
@@ -678,7 +685,7 @@ const Nav = () => {
   };
   
   const handleSignOut = () => {
-    router.push("/home");  
+    router.push("/");  
     setIsLoggedIn(false);
     setOrderCount(0);
     setLoginCart(false);

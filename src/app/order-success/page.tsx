@@ -12,6 +12,8 @@ export default function OrderSuccess() {
   const router = useRouter();
   const orderId = searchParams.get("purchase_order_id");
   const codOrderId = searchParams.get("orderId")
+  const customizeOrderId = searchParams.get("purchase_order_id")
+  const customizeCodOrderId = searchParams.get("customizeOrderId");
 
   console.log("orderID in success",orderId)
 
@@ -27,13 +29,33 @@ export default function OrderSuccess() {
         })
         const data = await response.json();
         console.log(data);
-      }else{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${codOrderId}`,{
+      }else if(customizeOrderId){
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/update-status/${customizeOrderId}`,{
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             },
             body: JSON.stringify({orderId: orderId}),
+        })
+        const data = await response.json();
+        console.log(data);
+      }else if(customizeCodOrderId){
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/cod/add-order`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({customizeOrderId: customizeCodOrderId}),
+        })
+        const data = await response.json();
+        console.log(data);
+      }else{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order/cod`,{
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({orderId: codOrderId}),
         })
         const data = await response.json();
         console.log(data);
@@ -46,7 +68,7 @@ export default function OrderSuccess() {
 
   useEffect(()=>{
     updateStatus();
-  },[orderId, codOrderId])
+  },[orderId, codOrderId, customizeOrderId, customizeCodOrderId])
 
   return (
     <div>
