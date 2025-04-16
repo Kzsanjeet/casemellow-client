@@ -35,7 +35,7 @@ export default function OrderSuccess() {
           headers: {
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({orderId: orderId}),
+            body: JSON.stringify({customizeOrderId: orderId}),
         })
         const data = await response.json();
         console.log(data);

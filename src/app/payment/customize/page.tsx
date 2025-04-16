@@ -33,7 +33,7 @@ export default function Payment() {
     },
   ];
 
-  const handlePayment = async () => {
+  const handlePayment = async ()    => {
     if (!selectedMethod) {
       toast.warning("Please select a payment method");
       return;
@@ -109,7 +109,7 @@ export default function Payment() {
             router.push(`/order-success?customizeOrderId=${customizeOrderId}`);
           } else {
             toast.error(data.error || "Payment verification failed!");
-            router.push("/cart")
+            router.push("/customize")
           }
         } catch (error) {
           console.error("Payment verification error:", error);
