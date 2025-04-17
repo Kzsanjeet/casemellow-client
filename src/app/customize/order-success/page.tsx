@@ -10,30 +10,35 @@ import { useEffect } from 'react';
 export default function OrderSuccess() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = searchParams.get("purchase_order_id");
-  const codOrderId = searchParams.get("orderId")
+  const customizeOrderId = searchParams.get("purchase_order_id")
+  const customizeCodOrderId = searchParams.get("customizeOrderId");
+
 
   const updateStatus = async () => {
     try {
       console.log({
         orderId: "order1",
-        codOrderId,
+        customizeOrderId,
+        customizeCodOrderId:"order2",
       });
   
-      if (orderId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${orderId}`, {
+      if (customizeOrderId) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/update-status/${customizeOrderId}`, {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
         });
         const data = await res.json();
-      } else if (codOrderId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order/cod`, {
+        console.log(data,"customize updated order");
+      } 
+      else if (customizeCodOrderId) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/cod/add-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: codOrderId }),
+          body: JSON.stringify({ customizeOrderId: customizeCodOrderId }),
         });
         const data = await res.json();
-      }
+        console.log(data,"cod updated order");
+      } 
     } catch (error) {
       console.error("Update status error:", error);
     }
@@ -41,7 +46,7 @@ export default function OrderSuccess() {
   
   useEffect(()=>{
     updateStatus();
-  },[orderId, codOrderId])
+  },[customizeOrderId, customizeCodOrderId])
 
   return (
     <div>

@@ -1062,7 +1062,7 @@ const CustomizePage = () => {
         <p className="text-lg sm:text-xl sm:mt-1 font-medium text-gray-700">Customize Your Phone Case</p>
       </div>
 
-      <div className="container mx-auto px-4 pb-8">
+      <div className="container mx-auto px-4 pb-8 w-4/6">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
           <div className="flex flex-col md:flex-row">
             {/* Left Side - Phone Preview & Image Upload */}
@@ -1089,7 +1089,7 @@ const CustomizePage = () => {
                     <img
                       src={getMockupImageUrl() || "/placeholder.svg"}
                       alt={selectedModelData.phoneModel}
-                      className="absolute inset-0 w-full h-full object-contain z-50"
+                      className="absolute inset-0 w-full h-full object-contain z-30"
                       onLoad={() => setMockupLoaded(true)}
                       onError={(e) => {
                         setMockupError(true)
@@ -1334,8 +1334,7 @@ const CustomizePage = () => {
                     onClick={handleOrderPlacement}
                     className="w-2/6 text-white font-semibold px-2 mx-2"
                     disabled={
-                      !croppedImage || !selectedBrand || !selectedModel || selectedCover.length === 0 || loading || !deliveryAddress
-                    || !pickupAddress || !number
+                      !croppedImage || !selectedBrand || !selectedModel || selectedCover.length === 0 || loading || !deliveryAddress|| !number
                     }
                   >
                     <span className="px-2 py-2">

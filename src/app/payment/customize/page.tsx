@@ -76,7 +76,7 @@ export default function Payment() {
         if (response.ok) {
           toast.success("Order placed successfully! Pay on delivery.");
           console.log("orderId in payment page", customizeOrderId)
-          router.push(`/order-success?orderId=${customizeOrderId}`);
+          router.push(`customize/order-success?orderId=${customizeOrderId}`);
         } else {
           toast.error(data.error || "Something went wrong. Please try again.");
         }
@@ -106,7 +106,7 @@ export default function Payment() {
 
           if (response.ok) {
             toast.success("Payment verified successfully!");
-            router.push(`/order-success?customizeOrderId=${customizeOrderId}`);
+            router.push(`customize/order-success?customizeOrderId=${customizeOrderId}`);
           } else {
             toast.error(data.error || "Payment verification failed!");
             router.push("/customize")
