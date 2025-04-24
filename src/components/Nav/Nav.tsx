@@ -769,6 +769,12 @@ const Nav = () => {
                   Order
                 </Link>
                 <Link
+                  href="/design"
+                  className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/order" ? "text-white font-semibold" : "text-gray-300 hover:text-white"}`}
+                >
+                  Designs
+                </Link>
+                <Link
                   href="/about"
                   className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/about" ? "text-white font-semibold" : "text-gray-300 hover:text-white"}`}
                 >
@@ -881,6 +887,12 @@ const Nav = () => {
               className={`block rounded-md px-3 py-2 text-base font-medium ${pathname === "/order" ? "text-white bg-gray-700" : "text-gray-300"}`}
             >
               Order
+            </Link>
+            <Link
+              href="/design"
+              className={`block rounded-md px-3 py-2 text-base font-medium ${pathname === "/order" ? "text-white bg-gray-700" : "text-gray-300"}`}
+            >
+              Designs
             </Link>
             <Link
               href="/about"

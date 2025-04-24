@@ -68,7 +68,7 @@ export default function Cart({ clientId }: CartProps) {
   const [allSelected, setAllSelected] = useState(false)
   const [number, setNumber] = useState("")
   const [total, setTotal] = useState(0)
-  const [pickupAddress, setPickupAddress] = useState("")
+  // const [pickupAddress, setPickupAddress] = useState("")
   const [deliveryAddress, setDeliveryAddress] = useState("")
   const [promoCode, setPromoCode] = useState("")
   const [oderData, setOrderData] = useState<IOrder[]>([])
@@ -78,7 +78,7 @@ export default function Cart({ clientId }: CartProps) {
   const handleOrderPlacement = async (e?: FormEvent) => {
     if (e) e.preventDefault()
 
-    if (!number || !deliveryAddress || !pickupAddress) {
+    if (!number || !deliveryAddress) {
       toast.error("Please fill in required delivery information")
       return { success: false }
     }
@@ -96,7 +96,7 @@ export default function Cart({ clientId }: CartProps) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           clientId,
-          pickUpAddress: pickupAddress,
+          // pickUpAddress: pickupAddress,
           deliveryAddress,
           promoCode,
           totalPrice: total,
@@ -110,7 +110,7 @@ export default function Cart({ clientId }: CartProps) {
 
       if (data.success) {
         setOrderData(data.data)
-        setPickupAddress("")
+        // setPickupAddress("")
         setNumber("")
         setDeliveryAddress("")
         setSelectedItems([])
@@ -419,7 +419,7 @@ export default function Cart({ clientId }: CartProps) {
                   />
                 </div>
 
-                {/* Pickup Address */}
+                {/* Pickup Address
                 <div>
                   <label htmlFor="pickupAddress" className="block text-xs text-gray-500 mb-1">
                     Pickup Address
@@ -433,7 +433,7 @@ export default function Cart({ clientId }: CartProps) {
                     onChange={(e) => setPickupAddress(e.target.value)}
                     rows={2}
                   />
-                </div>
+                </div> */}
 
                 {/* Delivery Address */}
                 <div>
@@ -465,7 +465,7 @@ export default function Cart({ clientId }: CartProps) {
               </div>
 
               {/* Voucher Code */}
-              <div className="mb-4 flex gap-2">
+              {/* <div className="mb-4 flex gap-2">
                 <input
                   type="text"
                   value={promoCode}
@@ -476,7 +476,7 @@ export default function Cart({ clientId }: CartProps) {
                 <button className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600">
                   APPLY
                 </button>
-              </div>
+              </div> */}
 
               {/* Total */}
               <div className="flex justify-between items-center border-t pt-4">
