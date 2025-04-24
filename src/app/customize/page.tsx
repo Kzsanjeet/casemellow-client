@@ -1022,7 +1022,7 @@ const CustomizePage = () => {
 
       if (data.success) {
         toast.success("Order placed successfully")
-        router.push(`/payment/customize?customizeOrderId=${data.data._id}&total=${data.data.totalPrice}`)
+        router.push(`/payment-customize?customizeOrderId=${data.data._id}&total=${data.data.totalPrice}`)
         return { success: true }
       } else {
         toast.error("Failed to place order")
