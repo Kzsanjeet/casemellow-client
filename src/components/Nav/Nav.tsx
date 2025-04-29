@@ -623,12 +623,22 @@ const Nav = () => {
 
   //to get user id
   useEffect(() => {
-    const userDetails = localStorage.getItem("userDetails")
-    if (userDetails) {
-      const parsedData = JSON.parse(userDetails)
-      setUserId(parsedData._id)
+    const userDetails = localStorage.getItem("userDetails");
+  
+    if (userDetails && userDetails !== "undefined") {
+      try {
+        const parsedData = JSON.parse(userDetails);
+        if (parsedData && parsedData._id) {
+          setUserId(parsedData._id);
+        }
+      } catch (error) {
+        console.error("Error parsing userDetails from localStorage:", error);
+        localStorage.removeItem("userDetails"); // Clean up invalid data
+      }
     }
-  }, [])
+  }, []);
+  
+  
 
 
   useEffect(() => {
@@ -770,7 +780,7 @@ const Nav = () => {
                 </Link>
                 <Link
                   href="/design"
-                  className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/order" ? "text-white font-semibold" : "text-gray-300 hover:text-white"}`}
+                  className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/design" ? "text-white font-semibold" : "text-gray-300 hover:text-white"}`}
                 >
                   Designs
                 </Link>
@@ -890,7 +900,7 @@ const Nav = () => {
             </Link>
             <Link
               href="/design"
-              className={`block rounded-md px-3 py-2 text-base font-medium ${pathname === "/order" ? "text-white bg-gray-700" : "text-gray-300"}`}
+              className={`block rounded-md px-3 py-2 text-base font-medium ${pathname === "/design" ? "text-white bg-gray-700" : "text-gray-300"}`}
             >
               Designs
             </Link>

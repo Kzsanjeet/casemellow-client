@@ -32,7 +32,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/anime/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
        <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -43,7 +42,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/luxury/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
       <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -54,7 +52,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/marvel/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
       <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -65,7 +62,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/mandala/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
       <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -76,7 +72,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/sports/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
       <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -87,7 +82,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/god/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div> 
 
       <div className='p-10 w-full flex flex-col justify-center items-center'>
@@ -98,7 +92,6 @@ const page = () => {
         data-pin-scale-width="80"
         href="https://www.pinterest.com/sanjeetkazi/unique/"
       ></a>
-        <iframe src="https://assets.pinterest.com/ext/embed.html?id=36380709483637951" height="420" style={{borderRadius:"0px"}} width="236" frameBorder="0" scrolling="no" ></iframe>
       </div>
 
       
