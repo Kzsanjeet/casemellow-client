@@ -146,6 +146,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SignUp from "./SignUp";
+import ForgotPassword from "./Forgot-password";
 
 interface LoginModalProps {
   loginOpen: boolean;
@@ -157,7 +158,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [authMode, setAuthMode] = useState<"login" | "signup">("login");
+  const [authMode, setAuthMode] = useState<"login" | "signup" | "forgot-password">("login");
 
   const router = useRouter();
   const { setIsLoggedIn } = useContext(LoginUserContext)!;
@@ -302,9 +303,9 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
                 </button>
               </div>
               <div className="flex items-center justify-between">
-                <Link href="#" className="text-sm text-red-600 hover:text-red-700">
+                <button className="text-sm text-red-600 hover:text-red-700" onClick={()=> setAuthMode("forgot-password")}>
                   Forgot password?
-                </Link>
+                </button>
               </div>
               <Button
                 type="submit"
@@ -329,7 +330,13 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
         </div>
       )}
 
-      {authMode === "signup" && <SignUp onBackToLogin={() => setAuthMode("login")} />}
+      {
+        authMode === "signup" ? (
+          <SignUp onBackToLogin={() => setAuthMode("login")} />
+        ) : authMode === "forgot-password" ? (
+          <ForgotPassword onBackToLogin={() => setAuthMode("login")} />
+        ) : null
+      }
     </>
   );
 };
