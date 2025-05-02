@@ -1,4 +1,5 @@
 "use client"
+import Login from "@/components/Login/Login"
 import { LoginUserContext } from "@/provider/LoginContext"
 import { UserContext } from "@/provider/UserContext"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -15,7 +16,7 @@ const ResetPassword : React.FC<SignUpProps> = ({ onBackToLogin })  => {
   const [token, setToken] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const { setIsLoggedIn } = useContext(LoginUserContext)!
+  const { isLoggedIn,setIsLoggedIn } = useContext(LoginUserContext)!
   const { setUser } = useContext(UserContext)!
 
   const searchParams = useSearchParams()
@@ -44,9 +45,9 @@ const ResetPassword : React.FC<SignUpProps> = ({ onBackToLogin })  => {
         setSuccess(data.message || "Password changed successfully")
         setPassword("")
         setConfirmPassword("")
+        setIsLoggedIn(true);
         localStorage.setItem("userDetails", JSON.stringify(data.data))
         setUser(data.data)
-        setIsLoggedIn(true)
         router.push("/")
       } else if (data.success === false) {
         setError(data.message || "Something went wrong, Try again !")
@@ -80,7 +81,7 @@ const ResetPassword : React.FC<SignUpProps> = ({ onBackToLogin })  => {
   }, [searchParams])
 
   return (
-    <div className="flex h-full items-center justify-center bg-gray-50 px-4">
+    <div className="flex h-full sm:h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md py-20 lg:py-40">
         <h1 className="text-2xl font-bold text-center text-gray-800">
           Change Password

@@ -156,6 +156,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const handleAddToCart = async () => {
     if (!isLoggedIn) {
       toast.error("Please log in to add items to the cart");
+      localStorage.setItem("redirectAfterLogin", `/products/${selectedBrand}/${product._id}`); 
       return;
     }
   
