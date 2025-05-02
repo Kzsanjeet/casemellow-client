@@ -8,14 +8,15 @@ import Nav from "@/components/Nav/Nav";
 import Footer from "@/components/Footer/Footer";
 
 export default function Payment() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
 
-  const orderId = searchParams.get("orderId");
-  const total = searchParams.get("total");
-  const pidx = searchParams.get("pidx"); 
+  // const orderId = searchParams.get("orderId");
+  // const total = searchParams.get("total");
+  // const pidx = searchParams.get("pidx"); 
 
   const [selectedMethod, setSelectedMethod] = useState("");
+  const [finalTotal, setFinalTotal] = useState("")
 
   const paymentMethods = [
     {
@@ -33,6 +34,8 @@ export default function Payment() {
   ];
 
   const handlePayment = async () => {
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("orderId");
     if (!selectedMethod) {
       toast.warning("Please select a payment method");
       return;
@@ -93,6 +96,12 @@ export default function Payment() {
   // Verify Khalti Payment after redirection
   useEffect(() => {
     const verifyPayment = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const orderId = params.get("orderId");
+      const total = params.get("total");
+      const pidx = params.get("pidx");
+      setFinalTotal(total)
+
       if (pidx && orderId) {
         try {
           const response = await fetch("/khalti/verify", {
@@ -118,7 +127,7 @@ export default function Payment() {
     };
 
     verifyPayment();
-  }, [pidx, orderId, router]);
+  }, [router]);
 
   return (
     <div>
@@ -191,7 +200,7 @@ export default function Payment() {
 
                 <div className="py-4 space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-900">Rs. {total}</span>
+                    <span className="text-gray-900">Rs. {finalTotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Fee</span>
