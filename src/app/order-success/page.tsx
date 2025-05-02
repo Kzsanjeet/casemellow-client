@@ -8,40 +8,41 @@ import Footer from '@/components/Footer/Footer';
 import { useEffect } from 'react';
 
 export default function OrderSuccess() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
-  const orderId = searchParams.get("purchase_order_id");
-  const codOrderId = searchParams.get("orderId")
-
-  const updateStatus = async () => {
-    try {
-      console.log({
-        orderId: "order1",
-        codOrderId,
-      });
-  
-      if (orderId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${orderId}`, {
-          method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
-        });
-        const data = await res.json();
-      } else if (codOrderId) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order/cod`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ orderId: codOrderId }),
-        });
-        const data = await res.json();
-      }
-    } catch (error) {
-      console.error("Update status error:", error);
-    }
-  };
-  
+  // const orderId = searchParams.get("purchase_order_id");
+  // const codOrderId = searchParams.get("orderId")
   useEffect(()=>{
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get('purchase_order_id');
+    const codOrderId = params.get('orderId');
+    const updateStatus = async () => {
+      try {
+        console.log({
+          orderId: "order1",
+          codOrderId,
+        });
+    
+        if (orderId) {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/update-status/${orderId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+          });
+          const data = await res.json();
+        } else if (codOrderId) {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order/cod`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId: codOrderId }),
+          });
+          const data = await res.json();
+        }
+      } catch (error) {
+        console.error("Update status error:", error);
+      }
+    };
     updateStatus();
-  },[orderId, codOrderId])
+  },[])
 
   return (
     <div>
