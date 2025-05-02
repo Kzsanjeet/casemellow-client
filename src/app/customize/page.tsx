@@ -35,8 +35,8 @@ interface CustomizeModel {
 
 const CustomizePage = () => {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const brandId = searchParams.get("brandId")
+  // const searchParams = useSearchParams()
+  // const brandId = searchParams.get("brandId")
   const { isLoggedIn } = useContext(LoginUserContext)!
 
   // Image and cropping state
@@ -77,6 +77,8 @@ const CustomizePage = () => {
 
   // Fetch all brands
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const brandId = params.get('brandId');
     const getAllBrands = async () => {
       setLoading(true)
       try {
@@ -96,7 +98,7 @@ const CustomizePage = () => {
       }
     }
     getAllBrands()
-  }, [brandId])
+  }, [])
 
   // Fetch models when a brand is selected
   useEffect(() => {
