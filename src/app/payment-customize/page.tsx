@@ -8,14 +8,16 @@ import Nav from "@/components/Nav/Nav";
 import Footer from "@/components/Footer/Footer";
 
 export default function Payment() {
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
   const [verified, setVerified] = useState(false);
+  const [finalTotal, setFinalTotal] = useState("")
 
-  const customizeOrderId = searchParams.get("customizeOrderId");
-  console.log(customizeOrderId,"cusOrderId")
-  const total = searchParams.get("total");
-  const pidx = searchParams.get("pidx"); 
+  // const customizeOrderId = searchParams.get("customizeOrderId");
+  // console.log(customizeOrderId,"cusOrderId")
+  // const total = searchParams.get("total");
+  // const pidx = searchParams.get("pidx"); 
+
 
   const [selectedMethod, setSelectedMethod] = useState("");
 
@@ -35,6 +37,9 @@ export default function Payment() {
   ];
 
   const handlePayment = async ()    => {
+    const params = new URLSearchParams(window.location.search);
+    const customizeOrderId = params.get("customizeOrderId");
+
     if (!selectedMethod) {
       toast.warning("Please select a payment method");
       return;
@@ -93,6 +98,11 @@ export default function Payment() {
   };    
 
 useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const customizeOrderId = params.get("customizeOrderId");
+  const total = params.get("total");
+  const pidx = params.get("pidx"); 
+  setFinalTotal(total)
   const verifyPayment = async () => {
     if (pidx && customizeOrderId && !verified) {
       try {
@@ -120,7 +130,7 @@ useEffect(() => {
   };
 
   verifyPayment();
-}, [pidx, customizeOrderId, verified, router]);
+}, [verified, router]);
 
   return (
     <div>
@@ -193,7 +203,7 @@ useEffect(() => {
 
                 <div className="py-4 space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-900">Rs. {total}</span>
+                    <span className="text-gray-900">Rs. {finalTotal}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Shipping Fee</span>
