@@ -42,8 +42,9 @@ interface Product {
 }
 
 const SearchPage = () => {
-  const searchParams = useSearchParams()
-  const query = searchParams.get("q") || ""
+  // const searchParams = useSearchParams()
+  const params = new URLSearchParams(window.location.search);
+  const query = params.get("q") || ""
 
   // const searchParams = useParams();
   // const query = searchParams.q || "";
