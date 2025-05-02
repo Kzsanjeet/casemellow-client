@@ -19,7 +19,7 @@ const ResetPassword = ()  => {
   const { isLoggedIn,setIsLoggedIn } = useContext(LoginUserContext)!
   const { setUser } = useContext(UserContext)!
 
-  const searchParams = useSearchParams()
+  // const searchParams = useSearchParams()
     const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -72,13 +72,14 @@ const ResetPassword = ()  => {
   }, [error, success])
 
   useEffect(() => {
-    const t = searchParams.get("t")
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get("t")
     if (t) {
       setToken(t)
     } else {
       setError("Invalid token")
     }
-  }, [searchParams])
+  }, [])
 
   return (
     <div className="flex h-full sm:h-screen items-center justify-center bg-gray-50 px-4">
