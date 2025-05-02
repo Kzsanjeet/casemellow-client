@@ -5,11 +5,11 @@ import { UserContext } from "@/provider/UserContext"
 import { useRouter, useSearchParams } from "next/navigation"
 import React, { useContext, useEffect, useState } from "react"
 
-interface SignUpProps {
-  onBackToLogin: () => void
-}
+// interface SignUpProps {
+//   onBackToLogin: () => void
+// }
 
-const ResetPassword : React.FC<SignUpProps> = ({ onBackToLogin })  => {
+const ResetPassword = ()  => {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [loading, setLoading] = useState(false)
@@ -141,9 +141,9 @@ const ResetPassword : React.FC<SignUpProps> = ({ onBackToLogin })  => {
             {loading ? <p>Changing Password...</p> : <p>Change Password</p>}
           </button>
         </form>
-        <div className="mt-4 text-center">
+        {/* <div className="mt-4 text-center">
           <button onClick={onBackToLogin} className="text-red-600 hover:text-red-700 hover:underline">Login</button>
-        </div>
+        </div> */}
       </div>
     </div>
   )
