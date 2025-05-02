@@ -16,36 +16,6 @@ export default function OrderSuccess() {
   const [customizeId, setCustomizeId] = useState<string | null>(null);
   const [customizeCodId, setCustomizeCodId] = useState<string | null>(null);
 
-  // const updateStatus = async () => {
-  //   try {
-  //     console.log({
-  //       // orderId: "order1",
-  //       customizeOrderId,
-  //       customizeCodOrderId:"order2",
-  //     });
-  
-  //     if (customizeOrderId) {
-  //       const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/update-status/${customizeOrderId}`, {
-  //         method: 'PATCH',
-  //         headers: { 'Content-Type': 'application/json' },
-  //       });
-  //       const data = await res.json();
-  //       console.log(data,"customize updated order");
-  //     } 
-  //     if (customizeCodOrderId) {
-  //       const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/cod/add-order`, {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ customizeOrderId: customizeCodOrderId }),
-  //       });
-  //       const data = await res.json();
-  //       console.log(data,"cod updated order");
-  //     } 
-  //   } catch (error) {
-  //     console.error("Update status error:", error);
-  //   }
-  // };
-  
 console.log("customizeOrderId",customizeOrderId)
   useEffect(() => {
     setCustomizeId(customizeOrderId);
