@@ -8,19 +8,22 @@ import Footer from '@/components/Footer/Footer';
 import { useEffect, useState } from 'react';
 
 export default function OrderSuccess() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const customizeOrderId = searchParams.get('purchase_order_id');
-  const customizeCodOrderId = searchParams.get('customizeOrderId');
+//   const customizeOrderId = searchParams.get('purchase_order_id');
+//   const customizeCodOrderId = searchParams.get('customizeOrderId');
 
   const [customizeId, setCustomizeId] = useState<string | null>(null);
   const [customizeCodId, setCustomizeCodId] = useState<string | null>(null);
 
-console.log("customizeOrderId",customizeOrderId)
+// console.log("customizeOrderId",customizeOrderId)
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const customizeOrderId = params.get('purchase_order_id');
+    const customizeCodOrderId = params.get('customizeOrderId');
+
     setCustomizeId(customizeOrderId);
     setCustomizeCodId(customizeCodOrderId);
-  }, [customizeOrderId, customizeCodOrderId]);
+  }, []);
 
   useEffect(() => {
     const updateStatus = async () => {
