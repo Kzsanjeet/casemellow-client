@@ -43,9 +43,6 @@ interface Product {
 
 const SearchPage = () => {
   // const searchParams = useSearchParams()
-  const params = new URLSearchParams(window.location.search);
-  const query = params.get("q") || ""
-
   // const searchParams = useParams();
   // const query = searchParams.q || "";
 
@@ -69,6 +66,7 @@ const SearchPage = () => {
   const [categories, setCategories] = useState<string[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [q, setQ] = useState("")
   const productSectionRef = useRef<HTMLDivElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
@@ -143,48 +141,12 @@ const SearchPage = () => {
     getPhoneModels()
   }, [selectedBrand])
 
-  // Fetch products with filters
-  // const fetchProduct = async () => {
-  //   if (!query) return
-
-  //   setLoading(true)
-  //   setError(null)
-
-  //   try {
-  //     let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}&search=${query}`
-
-  //     if (brand) url += `&brand=${brand}`
-  //     if (category) url += `&category=${category}`
-  //     if (phoneModel) url += `&phoneModel=${phoneModel}`
-  //     if (sort) url += `&sort=${sort}`
-  //     if (isActive !== undefined) url += `&isActive=${isActive}`
-
-  //     const response = await fetch(url, {
-  //       method: "GET",
-  //       headers: { "Content-Type": "application/json" },
-  //     })
-
-  //     const data = await response.json()
-
-  //     if (data.success) {
-  //       setProductDetails(data.data || [])
-  //       setTotalPages(data.pagination.totalPages || 1)
-  //       setTotalProducts(data.pagination.totalProducts || 0)
-  //       setCurrentPage(data.pagination.currentPage || 1)
-  //     } else {
-  //       setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
-  //       setProductDetails([])
-  //     }
-  //   } catch (error) {
-  //     setError("Failed to load products")
-  //     console.error(error)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
-
   // Fetch products when filters change or page changes or search query changes
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get("q") || ""
+    setQ(query)
+  
     const fetchProduct = async () => {
       if (!query) return
   
@@ -224,7 +186,7 @@ const SearchPage = () => {
       }
     }
     fetchProduct()
-  }, [query, brand, category, phoneModel, sort, isActive, currentPage])
+  }, [brand, category, phoneModel, sort, isActive, currentPage])
 
   // Handle brand selection
   const handleBrandChange = (value: string) => {
@@ -285,7 +247,7 @@ const SearchPage = () => {
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <SearchIcon className="h-6 w-6 text-primary" />
-                <span>&quot;{query}&quot;</span>
+                <span>&quot;{q}&quot;</span>
               </h1>
           </div> 
         </div>
