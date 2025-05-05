@@ -1,5 +1,5 @@
 "use client"
-import { Search, ShoppingCart } from "lucide-react"
+import { LogOut, Search, ShoppingCart } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter} from "next/navigation"
 import { useContext, useEffect, useState } from "react"
@@ -62,8 +62,6 @@ const Nav = () => {
   }, []);
   
   
-
-
   useEffect(() => {
     const getUserOrderData = async () => {
       if (!userId) return; // Don't fetch if userId is null
@@ -128,7 +126,7 @@ const Nav = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full bg-nav p-2 transition-transform duration-300 z-50 ${
+      className={`static top-0 left-0 w-full bg-nav p-2 transition-transform duration-300 z-50 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
@@ -253,7 +251,7 @@ const Nav = () => {
                     className="size-8 rounded-full"
                     height={20}
                     width={20}
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    src="https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTAxL3JtNjA5LXNvbGlkaWNvbi13LTAwMi1wLnBuZw.png"
                     alt="User Avatar"
                   />
                 </button>
@@ -270,17 +268,17 @@ const Nav = () => {
                   id="user-dropdown"
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
                 >
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  {/* <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     Your Profile
                   </a>
                   <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     Settings
-                  </a>
+                  </a> */}
                   <button
                     onClick={handleSignOut}
-                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="w-4/5 flex  justify-center items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   >
-                    Sign out
+                    <span className="pr-3"><LogOut/></span>Sign out
                   </button>
                 </div>
               )}

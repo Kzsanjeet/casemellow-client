@@ -1,13 +1,11 @@
 "use client"
-
-import { useEffect, useState, useRef } from "react"
-import { Search, Filter, X, ArrowUpDown } from "lucide-react"
-import { useDebounce } from "@/Hooks/use-debounce"
+import { useEffect, useState, useRef, Suspense } from "react"
+import { useSearchParams} from "next/navigation"
+import { Filter, X, SearchIcon, ChevronRight} from "lucide-react"
 import Card from "@/components/Cards/Card"
 import Footer from "@/components/Footer/Footer"
 import Loader from "@/components/Loading/Loader"
 import Nav from "@/components/Nav/Nav"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
@@ -19,7 +17,8 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Badge } from "@/components/ui/badge"
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList,BreadcrumbSeparator } from "@/components/ui/breadcrumb"
 
 interface Brand {
   _id: string
@@ -42,10 +41,14 @@ interface Product {
   updatedAt: string
 }
 
-const ProductPage = () => {
+const MainSearch = () => {
+  // const searchParams = useSearchParams()
+  // const searchParams = useParams();
+  // const query = searchParams.q || "";
+
+  // console.log("query",query)
+
   const [productDetails, setProductDetails] = useState<Product[]>([])
-  const [search, setSearch] = useState("")
-  const debouncedSearch = useDebounce(search, 500)
   const [brand, setBrand] = useState<string>("")
   const [category, setCategory] = useState<string>("")
   const [phoneModel, setPhoneModel] = useState<string>("")
@@ -54,6 +57,7 @@ const ProductPage = () => {
   const [sort, setSort] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [totalProducts, setTotalProducts] = useState(0)
   const [isActive, setIsActive] = useState<boolean | undefined>(undefined)
   const itemsPerPage = 12
   const [loading, setLoading] = useState(false)
@@ -62,10 +66,13 @@ const ProductPage = () => {
   const [categories, setCategories] = useState<string[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  // const [q, setQ] = useState("")
   const productSectionRef = useRef<HTMLDivElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
-  // Add this useEffect to detect mobile screens
+  const search = useSearchParams();
+  const query = search.get('q') || '';
+
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -89,7 +96,6 @@ const ProductPage = () => {
   // Fetch brands for dropdown
   useEffect(() => {
     const getBrandNames = async () => {
-      setLoading(true)
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/brands/get`, {
           method: "GET",
@@ -103,8 +109,6 @@ const ProductPage = () => {
         }
       } catch (error) {
         console.log(error)
-      } finally {
-        setLoading(false)
       }
     }
     getBrandNames()
@@ -138,17 +142,21 @@ const ProductPage = () => {
     getPhoneModels()
   }, [selectedBrand])
 
-
-  // Fetch products when filters change or page changes
+  // Fetch products when filters change or page changes or search query changes
   useEffect(() => {
+    // const params = new URLSearchParams(window.location.search);
+    // const query = params.get("q") || ""
+    // setQ(query)
+  
     const fetchProduct = async () => {
+      if (!query) return
+  
       setLoading(true)
       setError(null)
   
       try {
-        let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}`
+        let url = `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get/?page=${currentPage}&limit=${itemsPerPage}&search=${query}`
   
-        if (debouncedSearch) url += `&search=${debouncedSearch}`
         if (brand) url += `&brand=${brand}`
         if (category) url += `&category=${category}`
         if (phoneModel) url += `&phoneModel=${phoneModel}`
@@ -165,6 +173,7 @@ const ProductPage = () => {
         if (data.success) {
           setProductDetails(data.data || [])
           setTotalPages(data.pagination.totalPages || 1)
+          setTotalProducts(data.pagination.totalProducts || 0)
           setCurrentPage(data.pagination.currentPage || 1)
         } else {
           setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
@@ -178,8 +187,8 @@ const ProductPage = () => {
       }
     }
     fetchProduct()
-  }, [debouncedSearch, brand, category, phoneModel, sort, isActive, currentPage]);
-  
+  }, [query, brand, category, phoneModel, sort, isActive, currentPage])
+
   // Handle brand selection
   const handleBrandChange = (value: string) => {
     setBrand(value)
@@ -190,7 +199,6 @@ const ProductPage = () => {
 
   // Clear all filters
   const clearFilters = () => {
-    setSearch("")
     setBrand("")
     setCategory("")
     setPhoneModel("")
@@ -215,85 +223,61 @@ const ProductPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+      <div className="min-h-screen flex flex-col bg-white">
       <Nav />
       <div className="flex-1 pt-20 container w-full sm:w-[80%] sm:mx-auto">
+      <Breadcrumb className="max-w-[100%] mt-4 mx-auto">
+          <BreadcrumbList className="bg-white shadow-sm rounded-full px-6 py-2">
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/home">Home</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator><ChevronRight className="h-4 w-4" /></BreadcrumbSeparator>
+              <BreadcrumbItem>
+                <BreadcrumbLink href="/products">Products</BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+      </Breadcrumb>
         {/* Page Header - Centered */}
         <div className="text-center mb-8">
-          <div className="text-center mb-10 mt-4 flex flex-col items-center">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black sm:mb-2 relative">
-              Products
-              <span className="block bg-red-500 h-1 w-full absolute left-0 bottom-0"></span>
-            </h1>
-            <p className="text-lg sm:text-xl sm:mt-1 font-medium text-gray-700">Shop from variety of products</p>
-          </div>
-          <div className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl mx-auto pb-4 flex flex-col md:flex-row md:items-center gap-4">
-            {/* Search Bar */}
-            <div className="relative group flex-grow">
-              <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4 sm:h-5 sm:w-5 transition-colors duration-300 group-focus-within:text-primary" />
-              <Input
-                placeholder="Search products..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10 sm:pl-12 pr-3 sm:pr-4 py-2 sm:py-3 w-full text-sm sm:text-base rounded-full border border-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-300 outline-none"
-              />
-            </div>
-
-            {/* Sort & Filter Controls */}
-            <div className="flex sm:flex-row md:flex-row md:items-center justify-center items-center flex-row gap-4">
-              {/* Sort Button */}
-              <div className="flex items-center gap-2 px-3">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant={"outline"} className="flex items-center gap-2">
-                      <ArrowUpDown className="h-4 w-4" />
-                      <span>Sort</span>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuItem onClick={() => setSort("")}>Default</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSort("priceAsc")}>Price: Low to High</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSort("priceDesc")}>Price: High to Low</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSort("orders")}>Most Popular</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setSort("views")}>Most Viewed</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+          <div className="text-center mb-10 mt-4 flex flex-col items-center justify-center">
+              <div className="flex items-center gap-2 mb-2">
+                <Badge variant={"destructive"} className="px-3 py-1 text-sm">
+                  Search Results
+                </Badge>
               </div>
-
-              {/* Mobile Filter Button (Hidden on larger screens) */}
-              <div className="md:hidden flex justify-end">
-                <Button onClick={toggleSidebar} className="flex items-center gap-2 bg-primary text-white hover:bg-primary/90">
-                  <Filter className="h-4 w-4" />
-                  Filters
-                </Button>
-              </div>
-            </div>
-          </div>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 flex items-center gap-2">
+                <SearchIcon className="h-6 w-6 text-primary" />
+                <span>&quot;{query}&quot;</span>
+              </h1>
+          </div> 
         </div>
+        {/* Mobile Filter Button (Hidden on larger screens) */}
+        <div className="md:hidden flex justify-center">
+          <Button onClick={toggleSidebar} className="flex items-center gap-2 bg-primary text-white hover:bg-primary/90">
+              <Filter className="h-4 w-4" />
+              Filters
+          </Button>
+          </div>
 
         {/* Main Content Area */}
         <div className="flex">
           {/* Sidebar Filters - Fixed position on scroll */}
           <aside
-            className={`${
-              sidebarOpen ? "block" : "hidden"
-            } md:block md:w-1/5 md:sticky md:top-24 md:self-start md:max-h-[calc(100vh-120px)] md:overflow-y-auto md:pr-4 
+              className={`${
+                sidebarOpen ? "block" : "hidden"
+              } md:block md:w-1/5 md:sticky md:top-24 md:self-start md:max-h-[calc(100vh-120px)] md:overflow-y-auto md:pr-4 
               ${isMobile ? "fixed inset-0 z-50 bg-black/50" : ""}`}
           >
-            <div
-              className={`bg-white p-4 rounded-lg border shadow-sm ${isMobile ? "h-full w-4/5 max-w-xs overflow-y-auto" : ""}`}
-            >
+          <div className={`bg-white p-4 rounded-lg border shadow-sm ${isMobile ? "h-full w-4/5 max-w-xs overflow-y-auto" : ""}`}>
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold">Filters</h2>
                 <div className="flex gap-2">
                   <Button variant="ghost" size="sm" onClick={clearFilters} className="text-xs">
                     Clear All
                   </Button>
-                  {isMobile && (
                   <Button variant="ghost" size="icon" onClick={toggleSidebar} className="md:hidden">
-                    <X className="h-10 w-10 text-red-400 rounded-full hover:bg-red-400 " />
+                    <X className="h-4 w-4 text-red-400 hover:bg-red-200" />
                   </Button>
-                )}
                 </div>
               </div>
 
@@ -403,7 +387,8 @@ const ProductPage = () => {
           {/* Main Products Area */}
           <main className="md:w-4/5 flex-1 pl-6" ref={productSectionRef}>
             <div ref={topRef}></div>
-            <div>
+            {/* Sort Controls and Active Filters */}
+            <div className="mb-6">
               {/* Active Filters */}
               {(brand || category || phoneModel || isActive !== undefined || sort) && (
                 <div className="mt-4 pt-4 border-t">
@@ -486,9 +471,9 @@ const ProductPage = () => {
                 <Button onClick={clearFilters}>Clear All Filters</Button>
               </div>
             ) : (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {productDetails.map((product) => (
-                  <div key={product._id}>
+                  <div key={product._id} className="transition-alls">
                     <Card product={product} />
                   </div>
                 ))}
@@ -524,9 +509,9 @@ const ProductPage = () => {
           scroll-behavior: smooth;
         }
       `}</style>
-    </div>
+      </div>
   )
 }
 
-export default ProductPage
+export default MainSearch
 

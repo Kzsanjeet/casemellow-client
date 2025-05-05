@@ -44,40 +44,6 @@ const Page = () => {
   const [totalProducts, setTotalProducts] = useState(0);
   const itemsPerPage = 30;
 
-  // const fetchProduct = async () => {
-  //   setLoading(true);
-  //   setError(null);
-
-  //   try {
-  //     const response = await fetch(
-  //       `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-by-category/${category}?page=${currentPage}&limit=${itemsPerPage}&search=${debouncedSearch}`,
-  //       {
-  //         method: "GET",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     const data = await response.json();
-
-  //     if (data.success) {
-  //       setProductDetails(data.data || []);
-  //       setTotalPages(data.totalPages || 1);
-  //       setTotalProducts(data.totalProducts || 0);
-  //       setCurrentPage(data.currentPage || 1);
-  //     } else {
-  //       setError(data.message === "No products found" ? "no_products" : "Failed to fetch");
-  //       setProductDetails([]);
-  //     }
-  //   } catch (error) {
-  //     setError("Failed to load products");
-  //     console.error(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   useEffect(() => {
     if (category) {
       const fetchProduct = async () => {
