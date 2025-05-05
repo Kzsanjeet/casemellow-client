@@ -68,12 +68,20 @@ const CustomizePage = () => {
 
   // Fetch user ID from localStorage
   useEffect(() => {
-    const userDetails = localStorage.getItem("userDetails")
-    if (userDetails) {
-      const parsedData = JSON.parse(userDetails)
-      setUserId(parsedData._id)
+    const userDetails = localStorage.getItem("userDetails");
+  
+    if (userDetails && userDetails !== "undefined") {
+      try {
+        const parsedData = JSON.parse(userDetails);
+        if (parsedData && parsedData._id) {
+          setUserId(parsedData._id);
+        }
+      } catch (error) {
+        console.error("Error parsing userDetails from localStorage:", error);
+        localStorage.removeItem("userDetails"); // Clean up invalid data
+      }
     }
-  }, [])
+  }, []);
 
   // Fetch all brands
   useEffect(() => {
@@ -271,7 +279,8 @@ const CustomizePage = () => {
     // Validation
     if (!isLoggedIn) {
       toast.error("Please log in to add items to the order")
-      return
+      localStorage.setItem("redirectAfterLogin", "/customize"); 
+      return;
     }
 
     if (!selectedBrand) {
@@ -512,7 +521,7 @@ const CustomizePage = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Select Brand</label>
                     <select
-                      className="w-4/6 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full sm:w-4/5 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       value={selectedBrand}
                       onChange={(e) => setSelectedBrand(e.target.value)}
                       disabled={loading}
@@ -530,7 +539,7 @@ const CustomizePage = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Select Model</label>
                     <select
-                      className="w-4/6 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      className="w-full sm:w-4/5 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                       value={selectedModel}
                       onChange={(e) => setSelectedModel(e.target.value)}
                       disabled={!selectedBrand || loading}
@@ -548,7 +557,7 @@ const CustomizePage = () => {
                   {selectedModelData && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">Select Cover Type</label>
-                      <div className="grid grid-cols-2 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {getCoverTypes().map((type) => (
                           <label
                             key={type}
@@ -584,7 +593,7 @@ const CustomizePage = () => {
                         value={number}
                         onChange={(e) => setNumber(e.target.value)}
                         id="phoneNumber"
-                        className="w-4/6 border border-gray-300 rounded-md px-3 py-2 text-sm"
+                        className="w-full sm:w-4/5 border border-gray-300 rounded-md px-3 py-2 text-sm"
                         placeholder="Enter your phone number"
                         required
                       />
@@ -599,7 +608,7 @@ const CustomizePage = () => {
                         id="pickupAddress"
                         value={pickupAddress}
                         required
-                        className="w-4/6 border border-gray-300 rounded-md px-3 py-2 text-sm"
+                        className="w-full sm:w-4/5 border border-gray-300 rounded-md px-3 py-2 text-sm"
                         placeholder="Enter pickup address"
                         onChange={(e) => setPickupAddress(e.target.value)}
                         rows={2}
@@ -614,7 +623,7 @@ const CustomizePage = () => {
                       <textarea
                         id="deliveryAddress"
                         value={deliveryAddress}
-                        className="w-4/6 border border-gray-300 rounded-md px-3 py-2 text-sm"
+                        className="w-full sm:w-4/5 border border-gray-300 rounded-md px-3 py-2 text-sm"
                         placeholder="Enter delivery address"
                         onChange={(e) => setDeliveryAddress(e.target.value)}
                         rows={2}
@@ -635,10 +644,10 @@ const CustomizePage = () => {
                 )}
 
                 {/* Order Button */}
-                <div className="pt-6 flex w-4/5 items-center justify-start">
+                <div className="pt-6 flex w-full sm:w-4/5 items-center justify-start">
                   <Button
                     onClick={handleOrderPlacement}
-                    className="w-2/6 text-white font-semibold px-2 mx-2"
+                    className="w-full text-white font-semibold px-2 mx-2"
                     disabled={
                       !croppedImage || !selectedBrand || !selectedModel || selectedCover.length === 0 || loading || !deliveryAddress|| !number
                     }

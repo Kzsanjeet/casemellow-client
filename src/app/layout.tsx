@@ -5,8 +5,7 @@ import ScrollToTop from "@/components/ScrollUp/ScrollToTop";
 import { Toaster } from 'sonner';
 import LoginContext from "@/provider/LoginContext";
 import OrderCountProvider from "@/provider/CartContext";
-import UserProvider, { UserContext } from "@/provider/UserContext";
-
+import UserProvider from "@/provider/UserContext";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],

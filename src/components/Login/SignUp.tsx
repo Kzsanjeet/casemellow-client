@@ -1,14 +1,11 @@
 "use client"
-import React, { useContext, useState, FormEvent } from 'react'
+import React, {useState, FormEvent } from 'react'
 import { Button } from '../ui/button'
 import Image from 'next/image'
 import { Eye, EyeOff, Lock, Mail, X, Phone } from 'lucide-react'
 import { Input } from '../ui/input'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { LoginUserContext } from '@/provider/LoginContext'
-import { UserContext } from '@/provider/UserContext'
 import { toast } from 'sonner'
+import Login from './Login'
 
 interface SignUpProps {
   onBackToLogin: () => void
@@ -21,10 +18,6 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-
-  const router = useRouter()
-  const { setIsLoggedIn } = useContext(LoginUserContext)!
-  const { setUser } = useContext(UserContext)!
 
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault()
@@ -42,10 +35,11 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
 
       if (response.ok) {
         toast.success("Signup successful!")
-        localStorage.setItem("userDetails", JSON.stringify(data.data))
-        setUser(data.data)
-        setIsLoggedIn(true)
-        router.push("/")
+        setEmail("");
+        setName("");
+        setNumber("");
+        setPassword("");
+        onBackToLogin(); 
       } else {
         toast.error(data.message || "Signup failed.")
       }

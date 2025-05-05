@@ -78,7 +78,7 @@ const LoginUserProvider = ({ children }: { children: React.ReactNode }) => {
     return storedValue === "true"; // Ensure conversion to boolean
   });
 
-  console.log("User Logged In:", isLoggedIn);
+  // console.log("User Logged In:", isLoggedIn);
 
   // Save value to cookies whenever it changes
   useEffect(() => {

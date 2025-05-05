@@ -147,9 +147,17 @@ const Description: React.FC<DescProps> = ({ product }) => {
   // to get userId
   useEffect(() => {
     const userDetails = localStorage.getItem("userDetails");
-    if (userDetails) {
-      const parsedData = JSON.parse(userDetails);
-      setUserId(parsedData._id);
+  
+    if (userDetails && userDetails !== "undefined") {
+      try {
+        const parsedData = JSON.parse(userDetails);
+        if (parsedData && parsedData._id) {
+          setUserId(parsedData._id);
+        }
+      } catch (error) {
+        console.error("Error parsing userDetails from localStorage:", error);
+        localStorage.removeItem("userDetails"); // Clean up invalid data
+      }
     }
   }, []);
 
@@ -209,13 +217,13 @@ const Description: React.FC<DescProps> = ({ product }) => {
     }
   };
 
-  const handleUpdate = async() =>{
-    try {
+  // const handleUpdate = async() =>{
+  //   try {
       
-    } catch (error) {
+  //   } catch (error) {
       
-    }
-  }
+  //   }
+  // }
 
   const handleCoverTypeChange = (type: string) => {
     setSelectedCover((prev) =>
@@ -320,14 +328,16 @@ const Description: React.FC<DescProps> = ({ product }) => {
                 </div>
 
                   {/* Action Buttons */}
-                {/* {isCart?(
-                <div className="pt-8 flex w-4/5 items-center justify-start">
-                <Button variant='outline' disabled={true} onClick={handleAddToCart} className="cursor-not-allowed w-2/5 text-black font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span>Already on Cart</Button>
-              </div>
-                ):( */}
-                  <div className="pt-8 flex w-4/5 items-center justify-start">
-                  <Button onClick={handleAddToCart} className="w-2/5 text-white font-semibold px-2 mx-2"><span className='px-2 py-2'><ShoppingCart/></span> Add to Cart</Button>
-                </div>
+                 <div className="pt-8 flex w-4/5 items-center justify-start sm:justify-center">
+                    <Button  
+                      onClick={handleAddToCart} 
+                      className="w-full text-white font-semibold px-4 py-2 flex items-center justify-center gap-2"
+                    >
+                      <ShoppingCart />
+                      <span>Add to Cart</span>
+                    </Button>
+                  </div>
+
                  {/* )}  */}
                  
               </div>

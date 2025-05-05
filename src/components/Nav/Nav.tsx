@@ -125,10 +125,6 @@ const Nav = () => {
     setLoginOpen(false);
     localStorage.removeItem("userDetails");
   };
-  
-  
-
-  console.log(loginCart)
 
   return (
     <nav
