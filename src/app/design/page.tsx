@@ -93,9 +93,6 @@ const page = () => {
         href="https://www.pinterest.com/sanjeetkazi/unique/"
       ></a>
       </div>
-
-      
-
     <Footer/>
     </div>
   )

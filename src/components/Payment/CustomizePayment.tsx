@@ -7,13 +7,15 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Nav from "@/components/Nav/Nav";
 import Footer from "@/components/Footer/Footer";
 
-export default function Payment() {
+export default function CustomizePayment() {
   const searchParams = useSearchParams();
   const router = useRouter();
-
-  const orderId = searchParams.get("orderId");
+  const [verified, setVerified] = useState(false);
+  const customizeOrderId = searchParams.get("customizeOrderId");
+  console.log(customizeOrderId,"cusOrderId")
   const total = searchParams.get("total");
   const pidx = searchParams.get("pidx"); 
+
 
   const [selectedMethod, setSelectedMethod] = useState("");
 
@@ -32,15 +34,16 @@ export default function Payment() {
     },
   ];
 
-  const handlePayment = async () => {
+  const handlePayment = async ()    => {
     // const params = new URLSearchParams(window.location.search);
-    // const orderId = params.get("orderId");
+    // const customizeOrderId = params.get("customizeOrderId");
+
     if (!selectedMethod) {
       toast.warning("Please select a payment method");
       return;
     }
 
-    if (!orderId) {
+    if (!customizeOrderId) {
       toast.error("Invalid order details. Please try again.");
       return;
     }
@@ -48,11 +51,11 @@ export default function Payment() {
     try {
       if (selectedMethod === "khalti") {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/khalti/initiate`,
+          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/khalti/customize/initiate`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId }),
+            body: JSON.stringify({ customizeOrderId }),
           }
         );
 
@@ -66,18 +69,18 @@ export default function Payment() {
         }
       } else if (selectedMethod === "cash-on-delivery") {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/add-order/cod`,
+          `${process.env.NEXT_PUBLIC_LOCAL_PORT}/order/customize/cod/add-order`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ orderId }),
+            body: JSON.stringify({ customizeOrderId }),
           }
         );
         const data = await response.json();
         if (response.ok) {
           toast.success("Order placed successfully! Pay on delivery.");
-          console.log("orderId in payment page", orderId)
-          router.push(`/order-success?orderId=${orderId}`);
+          console.log("orderId in payment page", customizeOrderId)
+          router.push(`/customize/order/success?customizeOrderId=${customizeOrderId}`);
         } else {
           toast.error(data.error || "Something went wrong. Please try again.");
         }
@@ -90,43 +93,42 @@ export default function Payment() {
         "Payment processing failed. Please check your network and try again."
       );
     }
+  };    
+
+useEffect(() => {
+//   const params = new URLSearchParams(window.location.search);
+//   const customizeOrderId = params.get("customizeOrderId");
+//   const total = params.get("total");
+//   const pidx = params.get("pidx"); 
+//   setFinalTotal(total)
+  const verifyPayment = async () => {
+    if (pidx && customizeOrderId && !verified) {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/khalti/customize/verify`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ pidx, customizeOrderId }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          toast.success("Payment verified successfully!");
+          setVerified(true);
+          router.push(`/customize/order/success?customizeOrderId=${customizeOrderId}`);
+        } else {
+          toast.error(data.error || "Payment verification failed!");
+          router.push("/customize");
+        }
+      } catch (error) {
+        console.error("Payment verification error:", error);
+        toast.error("Something went wrong.");
+      }
+    }
   };
 
-  // Verify Khalti Payment after redirection
-  useEffect(() => {
-    const verifyPayment = async () => {
-      // const params = new URLSearchParams(window.location.search);
-      // const orderId = params.get("orderId");
-      // const total = params.get("total");
-      // const pidx = params.get("pidx");
-      // setFinalTotal(total)
-
-      if (pidx && orderId) {
-        try {
-          const response = await fetch("/khalti/verify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ pidx, orderId }),
-          });
-
-          const data = await response.json();
-
-          if (response.ok) {
-            toast.success("Payment verified successfully!");
-            router.push(`/order-success?orderId=${orderId}`);
-          } else {
-            toast.error(data.error || "Payment verification failed!");
-            router.push("/cart")
-          }
-        } catch (error) {
-          console.error("Payment verification error:", error);
-          toast.error("Something went wrong.");
-        }
-      }
-    };
-
-    verifyPayment();
-  }, [pidx,orderId, router]);
+  verifyPayment();
+}, [verified, router]);
 
   return (
     <div>
