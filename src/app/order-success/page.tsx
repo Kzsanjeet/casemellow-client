@@ -1,5 +1,5 @@
 import Loader from '@/components/Loading/Loader'
-import OrderSuccess from '@/components/SuccessOrder/OrderSuccess'
+import OrderSuccessConFirm from '@/components/SuccessOrder/OrderSuccess'
 import React, { Suspense } from 'react'
 
 const page = () => {
@@ -7,7 +7,7 @@ const page = () => {
     <div>
         <Suspense fallback={<Loader/>}
       >
-        <OrderSuccess/>
+        <OrderSuccessConFirm/>
       </Suspense>
     </div>
   )

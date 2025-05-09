@@ -7,7 +7,7 @@ import Nav from '@/components/Nav/Nav';
 import Footer from '@/components/Footer/Footer';
 import { useEffect } from 'react';
 
-export default function OrderSuccess() {
+export default function OrderSuccessConFirm() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const orderId = searchParams.get("purchase_order_id");
