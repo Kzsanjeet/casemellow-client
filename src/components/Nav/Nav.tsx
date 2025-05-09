@@ -126,7 +126,7 @@ const Nav = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full bg-nav p-2 transition-transform duration-300 z-50 ${
+      className={`static top-0 left-0 w-full bg-nav p-2 transition-transform duration-300 z-50 ${
         isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
