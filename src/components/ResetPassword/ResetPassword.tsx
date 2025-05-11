@@ -3,10 +3,14 @@ import { LoginUserContext } from "@/provider/LoginContext"
 import { UserContext } from "@/provider/UserContext"
 import { useRouter, useSearchParams } from "next/navigation"
 import React, { useContext, useEffect, useState } from "react"
+import Login from "../Login/Login"
+import { Input } from "../ui/input"
+import { Button } from "../ui/button"
+import { toast } from "sonner"
+import Nav from "../Nav/Nav"
+import Footer from "../Footer/Footer"
 
-// interface SignUpProps {
-//   onBackToLogin: () => void
-// }
+
 
 const ResetPassword = ()  => {
   const [password, setPassword] = useState("")
@@ -15,12 +19,12 @@ const ResetPassword = ()  => {
   // const [token, setToken] = useState("")
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
+    const [showLogin, setShowLogin] = useState(false) // <-- new state
   const { isLoggedIn,setIsLoggedIn } = useContext(LoginUserContext)!
   const { setUser } = useContext(UserContext)!
 
   const searchParams = useSearchParams()
   const token = searchParams.get("t")
-    const router = useRouter()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -42,13 +46,14 @@ const ResetPassword = ()  => {
       )
       const data = await response.json()
       if (data.success) {
+        toast.success("Password changed successfully")
         setSuccess(data.message || "Password changed successfully")
+        setShowLogin(true)
         setPassword("")
         setConfirmPassword("")
         setIsLoggedIn(true);
         localStorage.setItem("userDetails", JSON.stringify(data.data))
         setUser(data.data)
-        router.push("/")
       } else if (data.success === false) {
         setError(data.message || "Something went wrong, Try again !")
       }
@@ -71,70 +76,53 @@ const ResetPassword = ()  => {
     }
   }, [error, success])
 
+  if (showLogin) {
+    return <Login loginOpen={true} onLoginChange={() => setShowLogin(false)} />
+  }
+
+
   return (
-    <div className="flex h-full sm:h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-md py-20 lg:py-40">
+    <div
+      className="fixed h-screen w-full z-50 flex items-center justify-center bg-white"
+    >
+      <div
+        className="relative w-4/5 sm:3/12 md:3/12 xl:w-3/12 p-8 bg-white shadow-xl rounded-lg space-y-6"
+      >
         <h1 className="text-2xl font-bold text-center text-gray-800">
-          Change Password
+          Reset Password
         </h1>
-        <p className="mt-2 text-center text-gray-600 text-sm">
-          Enter your new password below to reset your account.
+        <p className="text-sm text-center text-gray-600">
+          Enter and confirm your new password
         </p>
-        {error && (
-          <p className="text-sm text-red-600 mt-2 bg-red-50 p-4">{error}</p>
-        )}
-        {success && (
-          <p className="text-sm text-green-600 mt-2 bg-green-50 p-4">
-            {success}
-          </p>
-        )}
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label
-              htmlFor="newPassword"
-              className="block text-sm font-medium text-gray-700"
-            >
-              New Password
-            </label>
-            <input
-              id="newPassword"
+            <Input
               type="password"
-              name="newPassword"
+              placeholder="New Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter new password"
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
-
           <div>
-            <label
-              htmlFor="confirmPassword"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
+            <Input
               type="password"
-              name="confirmPassword"
+              placeholder="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Confirm new password"
-              className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              required
             />
           </div>
 
-          <button
+          <Button
             type="submit"
-            className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={loading}
+            className="w-full bg-red-600 hover:bg-red-700 text-white py-4 rounded-lg"
           >
-            {loading ? <p>Changing Password...</p> : <p>Change Password</p>}
-          </button>
+            {loading ? "Changing Password..." : "Change Password"}
+          </Button>
         </form>
-        {/* <div className="mt-4 text-center">
-          <button onClick={onBackToLogin} className="text-red-600 hover:text-red-700 hover:underline">Login</button>
-        </div> */}
       </div>
     </div>
   )
