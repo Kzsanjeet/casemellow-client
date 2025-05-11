@@ -63,7 +63,7 @@ const AddCustomize = () => {
   // Order information
   const [userId, setUserId] = useState<string | null>(null)
   const [deliveryAddress, setDeliveryAddress] = useState<string>("")
-  const [pickupAddress, setPickupAddress] = useState<string>("")
+  // const [pickupAddress, setPickupAddress] = useState<string>("")
   const [number, setNumber] = useState<string>("")
 
   // Fetch user ID from localStorage
@@ -317,7 +317,7 @@ const AddCustomize = () => {
       // Add order details
       formData.append("clientId", userId)
       formData.append("customizeId", selectedModelData._id)
-      formData.append("pickUpAddress", pickupAddress)
+      // formData.append("pickUpAddress", pickupAddress)
       formData.append("deliveryAddress", deliveryAddress)
       formData.append("totalPrice", selectedModelData.coverPrice.toString())
       formData.append("number", number)
@@ -377,9 +377,9 @@ const AddCustomize = () => {
         <p className="text-lg sm:text-xl sm:mt-1 font-medium text-gray-700">Customize Your Phone Case</p>
       </div>
 
-      <div className="container mx-auto px-4 pb-8 w-4/6">
+      <div className="container mx-auto px-4 pb-8 w-full sm:w-4/6">
         <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-          <div className="flex flex-col md:flex-row">
+          <div className="flex sm:flex-col md:flex-row flex-col-reverse">
             {/* Left Side - Phone Preview & Image Upload */}
             <div className="w-full md:w-1/2 p-6 flex flex-col items-center justify-center border-r border-gray-200">
               <div className="relative mb-6">
@@ -599,7 +599,7 @@ const AddCustomize = () => {
                       />
                     </div>
 
-                    {/* Pickup Address */}
+                    {/* Pickup Address
                     <div>
                       <label htmlFor="pickupAddress" className="block text-xs text-gray-500 mb-1">
                         Pickup Address
@@ -613,7 +613,7 @@ const AddCustomize = () => {
                         onChange={(e) => setPickupAddress(e.target.value)}
                         rows={2}
                       />
-                    </div>
+                    </div> */}
 
                     {/* Delivery Address */}
                     <div>

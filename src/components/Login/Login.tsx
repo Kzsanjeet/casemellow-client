@@ -198,7 +198,8 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
           <SignUp onBackToLogin={() => setAuthMode("login")} />
         ) : authMode === "forgot-password" ? (
           <ForgotPassword onBackToLogin={() => setAuthMode("login")} />
-        ) : null
+        ) :
+         null
       }
     </>
   );
