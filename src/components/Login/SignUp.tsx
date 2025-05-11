@@ -17,6 +17,8 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
   const [number, setNumber] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
+  // const [error, setError] = useState("")
+  const [status, setStatus] = useState("")
   const [showPassword, setShowPassword] = useState(false)
 
   const handleSignUp = async (e: FormEvent) => {
@@ -35,11 +37,12 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
 
       if (response.ok) {
         toast.success("Signup successful!")
+        setStatus("Success")
         setEmail("");
         setName("");
         setNumber("");
         setPassword("");
-        onBackToLogin(); 
+        // onBackToLogin(); 
       } else {
         toast.error(data.message || "Signup failed.")
       }
@@ -71,6 +74,14 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
         </div>
 
         <form onSubmit={handleSignUp} className="space-y-4">
+          {status === "Success" && (
+              <div className="p-2 bg-green-50 rounded-xl shadow-md border border-green-200">
+              <p className="text-green-700 text-xl">
+                Email has been sent to you, Please verify it.
+              </p>
+            </div>
+          )}
+
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
             <Input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Full name" className="pl-10" required />
@@ -98,7 +109,7 @@ const SignUp: React.FC<SignUpProps> = ({ onBackToLogin }) => {
 
         <p className="text-center text-gray-600">
           Already have an account?{" "}
-          <button onClick={onBackToLogin} className="text-red-600 hover:text-red-700">Login</button>
+          <button onClick={onBackToLogin} className="text-red-600 hover:text-red-700 hover:underline">Login</button>
         </p>
       </div>
     </div>

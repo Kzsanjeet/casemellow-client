@@ -1,13 +1,14 @@
-import Footer from '@/components/Footer/Footer'
-import Nav from '@/components/Nav/Nav'
-import React from 'react'
+import Loader from '@/components/Loading/Loader'
+import VerifyEmail from '@/components/Login/Verify-email'
+import React, { Suspense } from 'react'
 
 const page = () => {
   return (
     <div>
-        <Nav/>
-            <h1>verify page</h1>
-        <Footer/>
+        <Suspense fallback={<Loader/>}
+      >
+        <VerifyEmail/>
+      </Suspense>
     </div>
   )
 }
