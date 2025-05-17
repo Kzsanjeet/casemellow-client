@@ -65,7 +65,7 @@ const ProductPage = () => {
   const productSectionRef = useRef<HTMLDivElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
-  // Add this useEffect to detect mobile screens
+  //  useEffect to detect mobile screens
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -487,13 +487,14 @@ const ProductPage = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ml-1 mx-auto">
-              {productDetails.map((product) => (
-                <div key={product._id}>
-                  <Card product={product} />
-                </div>
-              ))}
-            </div>
-            
+                {productDetails
+                  .filter(product => product.isActive === true)
+                  .map(product => (
+                    <div key={product._id}>
+                      <Card product={product} />
+                    </div>
+                ))}
+              </div>
             )}
 
             {/* Pagination Controls */}

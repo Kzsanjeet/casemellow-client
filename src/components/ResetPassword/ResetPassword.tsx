@@ -7,8 +7,6 @@ import Login from "../Login/Login"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import { toast } from "sonner"
-import Nav from "../Nav/Nav"
-import Footer from "../Footer/Footer"
 
 
 
