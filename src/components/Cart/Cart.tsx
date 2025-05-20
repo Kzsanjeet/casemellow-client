@@ -8,6 +8,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbS
 // import { CartContext } from "@/provider/CartContext"
 import Link from "next/link"
 import { OrderCountContext } from "@/provider/CartContext"
+import { Button } from "../ui/button"
 
 export interface CartItem {
   _id: string
@@ -464,20 +465,6 @@ export default function Cart({ clientId }: CartProps) {
                 <span>Rs. 0</span>
               </div>
 
-              {/* Voucher Code */}
-              {/* <div className="mb-4 flex gap-2">
-                <input
-                  type="text"
-                  value={promoCode}
-                  onChange={(e) => setPromoCode(e.target.value)}
-                  placeholder="Enter Voucher Code"
-                  className="border rounded-md px-3 py-2 text-sm flex-1"
-                />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600">
-                  APPLY
-                </button>
-              </div> */}
-
               {/* Total */}
               <div className="flex justify-between items-center border-t pt-4">
                 <span className="font-medium">Total</span>
@@ -485,13 +472,13 @@ export default function Cart({ clientId }: CartProps) {
               </div>
 
               {/* Checkout Button */}
-              <button
+              <Button
                 className="mt-4 w-full bg-green-500 text-white py-3 rounded-md font-medium hover:bg-green-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
                 disabled={getSelectedItemsCount() === 0}
                 onClick={handleOrderPlacement}
               >
                 PROCEED TO CHECKOUT ({getSelectedItemsCount()})
-              </button>
+              </Button>
             </div>
           </div>
         </div>

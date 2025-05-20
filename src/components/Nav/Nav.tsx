@@ -8,7 +8,19 @@ import ExpandableSearch from "../search/ExpandableSearch"
 import Login from "../Login/Login"
 import Image from "next/image"
 import { OrderCountContext } from "@/provider/CartContext"
-// import { toast, Toaster } from "sonner"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
+import { toast } from "sonner"
+
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -20,12 +32,18 @@ const Nav = () => {
   const pathname = usePathname()
   const { isLoggedIn } = useContext(LoginUserContext)!
   const [userId, setUserId] = useState(null)
+  const [username,setUsername] = useState("")
+  const [email,setEmail] = useState("")
+  const [number,setNumber] = useState("")
+  const [oldPassword,setOldPassword] = useState("")
+  const [newPassword,setNewPassword] = useState("")
   const [loginCart, setLoginCart] = useState(false)
   const { orderCount, setOrderCount } = useContext(OrderCountContext)!
   const { setIsLoggedIn } = useContext(LoginUserContext)!;
+  const [profile,setProfile] = useState([])
   const router = useRouter();
 
-
+//upscroll
   useEffect(() => {
     let ticking = false
 
@@ -53,6 +71,9 @@ const Nav = () => {
         const parsedData = JSON.parse(userDetails);
         if (parsedData && parsedData._id) {
           setUserId(parsedData._id);
+          setUsername(parsedData.name);
+          setEmail(parsedData.email)
+          setNumber(parsedData.number)
         }
       } catch (error) {
         console.error("Error parsing userDetails from localStorage:", error);
@@ -60,8 +81,43 @@ const Nav = () => {
       }
     }
   }, []);
-  
-  
+
+// Edit profile
+const handleProfileEdit = async () => {
+  try {
+    const editProfile = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_PORT}/client/edit`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: username,
+        email: email,
+        number: number,
+        oldPassword:oldPassword,
+        newPassword:newPassword,
+      }), 
+      credentials: "include",
+    });
+    const data = await editProfile.json();
+    if (data.success) {
+      toast.success("Profile updated");
+      setOldPassword("");
+      setNewPassword("");
+      setUsername(data.name);
+      setEmail(data.email);
+      setNumber(data.number);
+      localStorage.setItem("userDetails", JSON.stringify(data.data));
+    } else {
+      toast.error(data.message || "Failed to update profile");
+    }
+  } catch (error) {
+    console.error("Profile update error:", error);
+    toast.error("Something went wrong. Please try again.");
+  }
+};
+
+  //cart count
   useEffect(() => {
     const getUserOrderData = async () => {
       if (!userId) return; // Don't fetch if userId is null
@@ -268,18 +324,87 @@ const Nav = () => {
                   id="user-dropdown"
                   className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5"
                 >
-                  {/* <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Your Profile
-                  </a>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                    Settings
-                  </a> */}
-                  <button
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full">Profile</Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-full">
+                    <DialogHeader>
+                      <DialogTitle>Edit profile</DialogTitle>
+                      <DialogDescription>
+                        Make changes to your profile here. Click save when you're done.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="name" className="text-right">
+                          Name
+                        </label>
+                        <Input
+                          id="name"
+                          // defaultValue={username}
+                          value={username}
+                          onChange={(e) =>setUsername(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="email" className="text-right">
+                          Email
+                        </label>
+                        <Input
+                          id="email"
+                          value={email}
+                          onChange={(e) =>setEmail(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                       <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="number" className="text-right">
+                          Number
+                        </label>
+                        <Input
+                          id="number"
+                          value={number}
+                          onChange={(e) =>setNumber(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                       <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="oldPassword" className="text-right">
+                          Old Password
+                        </label>
+                        <Input
+                          id="oldPassword"
+                          value={oldPassword}
+                          onChange={(e) =>setOldPassword(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                       <div className="grid grid-cols-4 items-center gap-4">
+                        <label htmlFor="newPassword" className="text-right">
+                          New Password
+                        </label>
+                        <Input
+                          id="newPassword"
+                          value={newPassword}
+                          onChange={(e) =>setNewPassword(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button onClick={handleProfileEdit}>Save changes</Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                  <Button
+                  variant="outline"
                     onClick={handleSignOut}
-                    className="w-4/5 flex  justify-center items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className="w-full flex  justify-center items-center px-4 py-2 text-sm text-gray-900 hover:bg-gray-100"
                   >
-                    <span className="pr-3"><LogOut/></span>Sign out
-                  </button>
+                    <span className=""><LogOut/></span>Sign out
+                  </Button>
                 </div>
               )}
             </div>

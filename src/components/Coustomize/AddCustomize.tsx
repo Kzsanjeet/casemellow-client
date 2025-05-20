@@ -478,18 +478,18 @@ const AddCustomize = () => {
                     </div>
 
                     <div className="flex justify-between">
-                      <button
+                      <Button
                         onClick={removeImage}
                         className="flex items-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
                       >
                         <Trash2 className="mr-2 w-4 h-4" /> Remove
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         onClick={showCroppedImage}
                         className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300"
                       >
                         Apply Crop
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}
@@ -655,7 +655,7 @@ const AddCustomize = () => {
                     <span className="px-2 py-2">
                       <ShoppingCart />
                     </span>
-                    {loading? "Ordering..." : "Confrom Order"}
+                    {loading? "Ordering..." : "Confirm Order"}
                   </Button>
                 </div>
               </div>

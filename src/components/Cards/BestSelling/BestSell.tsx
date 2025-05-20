@@ -17,6 +17,7 @@ interface Product {
   coverType: string[];
   productDescription: string;
   productPrice: number;
+  discount:number;
   productImage: string;
   productCategory: string;
   productView: number;
@@ -33,34 +34,6 @@ const BestSell = () => {
     const [totalPages, setTotalPages] = useState(1);
     // const [totalProducts, setTotalProducts] = useState(0);
     const itemsPerPage = 8;
-  
-    // const fetchProduct = async () => {
-    //   setLoading(true)
-    //   setError(null)
-  
-    //   try {
-    //     const response = await fetch(
-    //       `${process.env.NEXT_PUBLIC_LOCAL_PORT}/products/get-best-selling?page=${currentPage}&limit=${itemsPerPage}`,
-    //     )
-  
-    //     const data = await response.json()
-  
-    //     if (data.success) {
-    //       setProductDetails(data.data || [])
-    //       setTotalPages(data.totalPages || 1)
-    //       // setTotalProducts(data.totalProducts || 0)
-    //       setCurrentPage(data.currentPage || 1)
-    //     } else {
-    //       setError(data.message === "No products found" ? "no_products" : "Failed to fetch")
-    //       setProductDetails([])
-    //     }
-    //   } catch (error) {
-    //     setError("Failed to load products")
-    //     console.error(error)
-    //   } finally {
-    //     setLoading(false)
-    //   }
-    // }
   
     useEffect(() => {
       const fetchProduct = async () => {
@@ -96,6 +69,7 @@ const BestSell = () => {
     const handlePageChange = (page: number) => {
       setCurrentPage(Math.max(1, Math.min(page, totalPages)))
   }
+  
   return (
     <div className='py-12 sm:p-6 md:p-8 flex flex-col items-center'>
       <div className="text-center mb-10 flex flex-col items-center">

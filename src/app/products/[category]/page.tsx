@@ -23,6 +23,7 @@ interface Product {
   coverType: string[];
   productDescription: string;
   productPrice: number;
+  discount:number;
   productImage: string;
   productCategory: string;
   productView: number;

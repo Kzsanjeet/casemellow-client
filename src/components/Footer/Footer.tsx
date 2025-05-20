@@ -72,6 +72,11 @@ const Footer = () => {
                   Pepsicola, Kathmandu
                 </a>
               </li>
+               <li>
+                <a className="text-slate-200 hover:text-white hover:underline text-sm">
+                  9843928450
+                </a>
+              </li>
             </nav>
           </div>
         </div>

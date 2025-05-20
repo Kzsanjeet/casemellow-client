@@ -15,6 +15,7 @@ interface Product {
   coverType: string[];
   productDescription: string;
   productPrice: number;
+  discount:number;
   productImage: string;
   productCategory: string;
   isActive: boolean;
@@ -26,10 +27,20 @@ interface CardProps {
   product: Product;
 }
 
+
 const Card: React.FC<CardProps> = ({ product }) => {
   if (!product) return null; // Prevents error if product is undefined
-  const discountRate = 15 / 100;
-  const priceBeforeDiscount = (product.productPrice / (1 - discountRate)).toFixed(0); // Correct calculation
+
+let discountRate: number;
+if (product.discount <= 0) {
+  discountRate = 10;
+} else {
+  discountRate = product.discount;
+}
+
+// Convert discount to decimal
+const priceBeforeDiscount = (product.productPrice / (1 - discountRate / 100)).toFixed(0);
+
   // const params = useParams();
   // const category = params.category;
 
@@ -65,7 +76,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
               <span className="text-[17px] font-bold text-red-600">Rs {product.productPrice}</span>
               <span className="text-xs text-gray-700 line-through ml-2">Rs {priceBeforeDiscount}</span>
             </div>
-            <span className="bg-green-500 text-white px-2 py-1 text-xs font-bold rounded-md">15% OFF</span>
+            <span className="bg-green-500 text-white px-2 py-1 text-xs font-bold rounded-md">{discountRate}% off</span>
           </div>
         </div>
       </motion.div>

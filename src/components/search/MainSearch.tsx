@@ -33,6 +33,7 @@ interface Product {
   coverType: string[]
   productDescription: string
   productPrice: number
+  discount:number
   productImage: string
   productCategory: string
   productView: number
@@ -42,12 +43,6 @@ interface Product {
 }
 
 const MainSearch = () => {
-  // const searchParams = useSearchParams()
-  // const searchParams = useParams();
-  // const query = searchParams.q || "";
-
-  // console.log("query",query)
-
   const [productDetails, setProductDetails] = useState<Product[]>([])
   const [brand, setBrand] = useState<string>("")
   const [category, setCategory] = useState<string>("")
@@ -66,13 +61,13 @@ const MainSearch = () => {
   const [categories, setCategories] = useState<string[]>([])
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
-  // const [q, setQ] = useState("")
   const productSectionRef = useRef<HTMLDivElement>(null)
   const topRef = useRef<HTMLDivElement>(null)
 
   const search = useSearchParams();
   const query = search.get('q') || '';
 
+  //check if mobile
   useEffect(() => {
     const checkIfMobile = () => {
       setIsMobile(window.innerWidth < 768)
