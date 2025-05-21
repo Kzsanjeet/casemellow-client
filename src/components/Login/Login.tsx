@@ -115,7 +115,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
               Login to <span className="text-red-700 font-semibold">Casemellow</span>
             </p>
 
-            <Button
+            {/* <Button
               variant="outline"
               className="w-full flex items-center justify-center space-x-2 border-gray-300"
               onClick={() => toast.info("Google login coming soon!")}
@@ -134,7 +134,7 @@ const Login: React.FC<LoginModalProps> = ({ loginOpen, onLoginChange }) => {
               <span className="absolute top-[-12px] left-1/2 transform -translate-x-1/2 bg-white px-3 text-gray-500">
                 OR
               </span>
-            </div>
+            </div> */}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="relative">

@@ -19,7 +19,7 @@ const Page = () => {
             <Category/>
             <Popular/>
             <BestSell/>
-            <HappyCustomer/>
+            {/* <HappyCustomer/> */}
             <Footer/>
         </div>
     )

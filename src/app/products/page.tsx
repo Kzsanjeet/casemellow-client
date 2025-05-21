@@ -300,7 +300,7 @@ const ProductPage = () => {
 
               <div className="space-y-6">
                 {/* Brand Filter */}
-                <Accordion type="single" defaultValue="brands">
+                <Accordion collapsible type="single" defaultValue="brands">
                   <AccordionItem value="brands">
                     <AccordionTrigger className="text-sm font-medium">Brands</AccordionTrigger>
                     <AccordionContent>
@@ -330,7 +330,7 @@ const ProductPage = () => {
 
                 {/* Phone Model Filter */}
                 {phoneModels.length > 0 && (
-                  <Accordion type="single" defaultValue="models">
+                  <Accordion collapsible type="single" defaultValue="models">
                     <AccordionItem value="models">
                       <AccordionTrigger className="text-sm font-medium">Phone Models</AccordionTrigger>
                       <AccordionContent>
@@ -365,7 +365,7 @@ const ProductPage = () => {
 
                 {/* Category Filter */}
                 {categories.length > 0 && (
-                  <Accordion type="single" defaultValue="categories">
+                  <Accordion collapsible type="single" defaultValue="categories">
                     <AccordionItem value="categories">
                       <AccordionTrigger className="text-sm font-medium">Categories</AccordionTrigger>
                       <AccordionContent>

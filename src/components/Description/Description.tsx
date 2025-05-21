@@ -39,6 +39,7 @@ interface Product {
   coverType: string[];
   productDescription: string;
   productPrice: number;
+  discount:number;
   productImage: string;
   productCategory: string;
   productView: number;
@@ -67,6 +68,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
   const router = useRouter();
   const [userId, setUserId] = useState(null);
   
+  //get brands
   useEffect(() => {
     const getBrandName = async () => {
       setLoading(true);
@@ -91,6 +93,7 @@ const Description: React.FC<DescProps> = ({ product }) => {
     getBrandName();
   }, []);
   
+  //get phone models
   useEffect(() => {
     if (!selectedBrand) return; // Avoid unnecessary calls when no brand is selected
     const controller = new AbortController();

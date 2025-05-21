@@ -6,10 +6,10 @@ import React, { useEffect } from 'react'
 const page = () => {
     useEffect(() => {
     const script = document.createElement("script");
-    script.async = true;
-    script.defer = true;
+    script.async = true; //Load it asynchronously (don’t block other rendering)
+    script.defer = true; // Wait to execute until HTML is parsed
     script.src = "//assets.pinterest.com/js/pinit.js";
-    document.body.appendChild(script);
+    document.body.appendChild(script); //Add it to the DOM so the browser loads it
   }, []);
   return (
     <div className='bg-white'>

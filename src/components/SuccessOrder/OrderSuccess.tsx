@@ -12,10 +12,8 @@ export default function OrderSuccessConFirm() {
   const router = useRouter();
   const orderId = searchParams.get("purchase_order_id");
   const codOrderId = searchParams.get("orderId")
+
   useEffect(()=>{
-    // const params = new URLSearchParams(window.location.search);
-    // const orderId = params.get('purchase_order_id');
-    // const codOrderId = params.get('orderId');
     const updateStatus = async () => {
       try {
         console.log({
@@ -47,7 +45,7 @@ export default function OrderSuccessConFirm() {
   return (
     <div>
       <Nav/>
-    <div className="min-h-screen bg-gradient-to-b from-white to-green-50 flex flex-col items-center justify-center p-6">
+    <div className="min-h-screen bg-white flex flex-col items-center justify-center p-6">
       <motion.div 
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -96,7 +94,7 @@ export default function OrderSuccessConFirm() {
       </motion.div>
       
       <div className="mt-6 text-sm text-gray-400">
-        Questions? Contact our support team at support@example.com
+        Questions? Contact our support team at 9843928450
       </div>
     </div>
     <Footer/>

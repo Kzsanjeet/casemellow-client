@@ -63,7 +63,6 @@ const AddCustomize = () => {
   // Order information
   const [userId, setUserId] = useState<string | null>(null)
   const [deliveryAddress, setDeliveryAddress] = useState<string>("")
-  // const [pickupAddress, setPickupAddress] = useState<string>("")
   const [number, setNumber] = useState<string>("")
 
   // Fetch user ID from localStorage
