@@ -172,22 +172,24 @@ const AddCustomize = () => {
     }
   }
 
-  // Image handling functions
+  // Handles when the user selects a file.
   const onFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0]
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
+      const reader = new FileReader()  //read files
+      reader.readAsDataURL(file) //Converts file to base64 string So it can be shown/cropped without uploading
       reader.onload = () => {
         setImage(reader.result as string)
       }
     }
   }
 
+  // Stores the pixel-based crop coordinates returned from react-easy-crop.
   const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
 
+  // This function does that: creates a new image from the base64 URL.
   const createImage = (url: string): Promise<HTMLImageElement> => {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -202,8 +204,8 @@ const AddCustomize = () => {
 
     try {
       const sourceImage = await createImage(image)
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
+      const canvas = document.createElement("canvas") // Create an invisible canvas
+      const ctx = canvas.getContext("2d") //Get the 2D drawing context of the canvas.
       if (!ctx) throw new Error("Canvas context is null")
 
       canvas.width = croppedAreaPixels.width
@@ -211,8 +213,8 @@ const AddCustomize = () => {
 
       ctx.drawImage(
         sourceImage,
-        croppedAreaPixels.x,
-        croppedAreaPixels.y,
+        croppedAreaPixels.x, // start x (source)
+        croppedAreaPixels.y, // start y (source)
         croppedAreaPixels.width,
         croppedAreaPixels.height,
         0,

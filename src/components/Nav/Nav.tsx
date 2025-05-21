@@ -328,7 +328,7 @@ const handleProfileEdit = async () => {
                   <DialogTrigger asChild>
                     <Button variant="outline" className="w-full">Profile</Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-full">
+                  <DialogContent className="w-4/5">
                     <DialogHeader>
                       <DialogTitle>Edit profile</DialogTitle>
                       <DialogDescription>
