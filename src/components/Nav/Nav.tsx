@@ -257,12 +257,12 @@ const handleProfileEdit = async () => {
                 >
                   Designs
                 </Link>
-                <Link
+                {/* <Link
                   href="/about"
                   className={`rounded-md px-3 py-2 text-sm font-medium ${pathname === "/about" ? "text-white font-semibold" : "text-gray-300 hover:text-white"}`}
                 >
                   About
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>
@@ -446,12 +446,12 @@ const handleProfileEdit = async () => {
             >
               Designs
             </Link>
-            <Link
+            {/* <Link
               href="/about"
               className={`block rounded-md px-3 py-2 text-base font-medium ${pathname === "/about" ? "text-white bg-gray-700" : "text-gray-300"}`}
             >
               About
-            </Link>
+            </Link> */}
           </div>
         </div>
       )}
